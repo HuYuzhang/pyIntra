@@ -6,16 +6,16 @@ from h5 import h5Handler
 
 root_path = '/home/hyz/lab/intra/'
 deploy_path ='network/deploy.prototxt'
-model_path = 'network/planar.caffemodel'
+model_path = 'network/angle.caffemodel'
 # img_path = 'img/'
 # target_path = 'target/'
-gt_path = 'gt/'
-pred_path = 'pred/'
+gt_path = '../gt/'
+pred_path = '../pred/'
 h5_path = '/home/hyz/angle_test.h5'
 
 # initilization
-# deploy_path = root_path + deploy_path
-# model_path = root_path + model_path
+deploy_path = root_path + deploy_path
+model_path = root_path + model_path
 # img_path = root_path + img_path
 net = caffe.Net(deploy_path, model_path, caffe.TEST)
 # finish initilization
@@ -37,9 +37,9 @@ net = caffe.Net(deploy_path, model_path, caffe.TEST)
 
 # 1-sampe refer to one picture
 st_id = 0
-ed_id = 100
+ed_id = 10000
 sample_number = ed_id - st_id
-stride = 1
+stride = 10
 handler = h5Handler(h5_path)
 datas = handler.read('data', st_id, ed_id, stride)
 labels = handler.read('label', st_id, ed_id, stride)
