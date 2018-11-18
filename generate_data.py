@@ -1,5 +1,6 @@
 import numpy as np
 import cv2 as cv
+from h5 import h5Handler
 
 dump_path = 'dump_dir.txt'
 dec_path = '../raw_data/dec.yuv'
@@ -26,6 +27,15 @@ test_img = np.zeros([64,64])
 dcvars = []
 planarvars = []
 anglevars = []
+
+# --------------for debug------------------
+cnt = 0
+datas = np.zeros([20, 3072, 1, 1])
+labels = np.zeros([20, 1024, 1, 1])
+flag = True   
+handler = h5Handler('/home/hyz/lab/intra/train/train.h5')     
+# --------------for debug------------------
+
 with open(dump_path) as f:
     while True:
         line = f.readline()
@@ -36,6 +46,11 @@ with open(dump_path) as f:
         x = int(x)
         f_id = int(f_id)
         mode = int(mode)
+        # --------------for debug------------------
+        if f_id > 0:
+            break
+        # --------------for debug------------------
+
         if y == 0 and x == 0:
             gt_img = read_frame(gt_path, f_id, height, width)
             dec_img = read_frame(dec_path, f_id, height, width)
@@ -49,6 +64,22 @@ with open(dump_path) as f:
         test_img[:32,:64] = input[:,:2048,:,:].reshape([32,64])
         test_img[32:,:32] = input[:,2048:,:,:].reshape([32,32])
         test_img[32:,32:] = label.reshape([32,32])
+
+        # --------------for debug------------------
+        datas[cnt:cnt + 1, :, :, :] = input / 255.0
+        labels[cnt:cnt + 1, :, :, :] = label / 255.0
+        cnt += 1
+        if cnt == 20:
+            if flag:
+                handler.write(datas, label, create=True)
+                print('$$$$$$$$$$$ new h5 file constructed $$$$$$$$$$$$')
+                flag = False
+            else:
+                handler.write(datas, labels, create=False)
+                print('$$$$$$$$$$$ add data to existed h5 file constructed $$$$$$$$$$$$')
+            cnt = 0
+        # --------------for debug------------------
+
         if mode == 0:
             planarvars.append(np.var(test_img))
         elif mode == 1:
