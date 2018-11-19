@@ -10,6 +10,12 @@ height = 1024
 width = 1792
 block_size = 32
 
+# define 3 mode
+planar_mode = 0
+dc_mode = 1
+angle_mode = 2
+
+
 # Assume that our video is I420
 def read_frame(filename, idx, _height, _width):
     pixel_num = _height * _width
@@ -20,6 +26,12 @@ def read_frame(filename, idx, _height, _width):
         data = np.fromfile(f, dtype=np.uint8, count=pixel_num)
         return data.reshape([_height, _width])
 
+def filter_sample(img, threshold):
+    var = np.var(img)
+    if var > threshold:
+        return True
+    else:
+        return False
 
 input = np.zeros([1, 3072, 1, 1])
 label = np.zeros([1, 1024, 1, 1])
@@ -47,8 +59,8 @@ with open(dump_path) as f:
         f_id = int(f_id)
         mode = int(mode)
         # --------------for debug------------------
-        if f_id > 0:
-            break
+        # if f_id > 0:
+        #     break
         # --------------for debug------------------
 
         if y == 0 and x == 0:
@@ -65,24 +77,25 @@ with open(dump_path) as f:
         test_img[32:,:32] = input[:,2048:,:,:].reshape([32,32])
         test_img[32:,32:] = label.reshape([32,32])
 
-        # --------------for debug------------------
-        datas[cnt:cnt + 1, :, :, :] = input / 255.0
-        labels[cnt:cnt + 1, :, :, :] = label / 255.0
-        cnt += 1
-        if cnt == 20:
-            if flag:
-                handler.write(datas, label, create=True)
-                print('$$$$$$$$$$$ new h5 file constructed $$$$$$$$$$$$')
-                flag = False
-            else:
-                handler.write(datas, labels, create=False)
-                print('$$$$$$$$$$$ add data to existed h5 file constructed $$$$$$$$$$$$')
-            cnt = 0
-        # --------------for debug------------------
 
-        if mode == 0:
+        # --------------for debug------------------(write data to hdf5 file)
+        # datas[cnt:cnt + 1, :, :, :] = input / 255.0
+        # labels[cnt:cnt + 1, :, :, :] = label / 255.0
+        # cnt += 1
+        # if cnt == 20:
+        #     if flag:
+        #         handler.write(datas, label, create=True)
+        #         print('$$$$$$$$$$$ new h5 file constructed $$$$$$$$$$$$')
+        #         flag = False
+        #     else:
+        #         handler.write(datas, labels, create=False)
+        #         print('$$$$$$$$$$$ add data to existed h5 file constructed $$$$$$$$$$$$')
+        #     cnt = 0
+        # --------------for debug------------------(write data to hdf5 file)
+
+        if mode == planar_mode:
             planarvars.append(np.var(test_img))
-        elif mode == 1:
+        elif mode == dc_mode:
             dcvars.append(np.var(test_img))
         else:
             anglevars.append(np.var(test_img))
