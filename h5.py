@@ -6,7 +6,7 @@ class h5Handler(object):
         self.h5_path = h5_path
 
     def read(self, key, start, end, step):
-        fid = h5py.File(h5_path, 'r')
+        fid = h5py.File(self.h5_path, 'r')
         ret = fid[key][start:end:step]
         fid.close()
         return ret
