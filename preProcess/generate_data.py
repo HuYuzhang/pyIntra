@@ -89,12 +89,12 @@ with open(dump_path) as f:
         if x == 0 or y == 0:
             continue
         # print([x, y])
-        input[:,:2048,:,:] = dec_img[x-block_size:x, y-block_size:y+block_size].reshape([1,2048,1,1])
-        input[:,2048:,:,:] = dec_img[x:x+block_size,y-block_size:y].reshape([1,1024,1,1])
-        label[...] = gt_img[x:x+block_size,y:y+block_size].reshape([1,1024,1,1])
-        test_img[:32,:64] = input[:,:2048,:,:].reshape([32,64])
-        test_img[32:,:32] = input[:,2048:,:,:].reshape([32,32])
-        test_img[32:,32:] = label.reshape([32,32])
+        input[:,:2048,:,:] = dec_img[x-block_size:x, y-block_size:y+block_size].reshape([1,2048,1,1]) / 255.0
+        input[:,2048:,:,:] = dec_img[x:x+block_size,y-block_size:y].reshape([1,1024,1,1]) / 255.0
+        label[...] = gt_img[x:x+block_size,y:y+block_size].reshape([1,1024,1,1]) / 255.0
+        # test_img[:32,:64] = input[:,:2048,:,:].reshape([32,64])
+        # test_img[32:,:32] = input[:,2048:,:,:].reshape([32,32])
+        # test_img[32:,32:] = label.reshape([32,32])
 
 
         # --------------for debug------------------(write data to hdf5 file)
@@ -142,9 +142,7 @@ with open(dump_path) as f:
                 planar_handler.write(planarinput(:pc,:,:,:), planarlabel(:pc,:,:,:), create=False)
                 dc_handler.write(dcinput(:dc,:,:,:), dclabel(:dc,:,:,:), create=False)
                 angle_handler.write(angleinput(:ac,:,:,:), anglelabel(:ac,:,:,:), create=False)
-            pc = 0
-            dc = 0
-            ac = 0
+            print('In this frame %d: planar: %d, dc: %d, angle: %d'%(f_id, pc, dc, ac))
 
 
 print(np.mean(planarvars), len(planarvars))
