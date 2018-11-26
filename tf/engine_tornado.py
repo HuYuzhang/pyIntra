@@ -12,11 +12,11 @@ batch_size = 1024
 epochs = 1000
 
 
-def tf_build_model(module_name, weights_name, params, input_tensor, output_tensor, mode):
+def tf_build_model(module_name, weights_name, params, input_tensor, output_tensor):
     with tf.variable_scope('main_full', reuse=tf.AUTO_REUSE):
         model_module = __import__(module_name)
         train_op, satd_op, mse_op = model_module.build_model(
-            input_tensor, output_tensor, params, mode=mode)
+            input_tensor, output_tensor, params)
         return train_op, satd_op, mse_op
 
 
@@ -25,23 +25,25 @@ def drive():
     block_size = 8
     model_module_name = sys.argv[2]
     weights_name = None
-    mode = int(sys.argv[3])
-    num_scale = int(sys.argv[4])
-    init_lr = float(sys.argv[5])
-    batch_size = int(sys.argv[6])
-    if len(sys.argv) == 8:
-        weights_name = sys.argv[7]
+    init_lr = float(sys.argv[3])
+    batch_size = int(sys.argv[4])
+    if len(sys.argv) == 6:
+        weights_name = sys.argv[5]
     print(weights_name)
+
+    h5_path = ''
     # load data
 
     hf = None
-    if mode == 3:
-        hf = h5py.File('./General_dataset_%d_full.h5' % (num_scale))
-        print('./General_dataset_%d_full.h5' % (num_scale))
-    else:
-        hf = h5py.File('./General_dataset_%d_partial.h5' % (num_scale))
-        print('./General_dataset_%d_partial.h5' % (num_scale))
+    # if mode == 3:
+    #     hf = h5py.File('./General_dataset_%d_full.h5' % (num_scale))
+    #     print('./General_dataset_%d_full.h5' % (num_scale))
+    # else:
+    #     hf = h5py.File('./General_dataset_%d_partial.h5' % (num_scale))
+    #     print('./General_dataset_%d_partial.h5' % (num_scale))
     
+    hf = h5py.File(h5_path)
+
     with tf.Session() as sess:
         pass
         
@@ -75,17 +77,17 @@ def drive():
         for i in range(0, length-bar, batch_size)[:-1]:
             yield val_data[i:i+batch_size, :, :, :], val_label[i:i+batch_size, :, :, :]
 
-    inputs = tf.placeholder(tf.float32, [batch_size, num_scale*mode, num_scale*mode, 1])
-    targets = tf.placeholder(tf.float32, [batch_size, num_scale, num_scale, 1])
+    inputs = tf.placeholder(tf.float32, [batch_size, 64, 64, 1])
+    targets = tf.placeholder(tf.float32, [batch_size, 32, 32, 1])
 
     # build model
     train_op, satd_loss, mse_loss = tf_build_model(model_module_name,
                                        weights_name,
                                        {'learning_rate': init_lr,
-                                           'batch_size': batch_size,
-                                           'num_scale':num_scale},
+                                           'batch_size': batch_size
+                                        },
                                        inputs,
-                                       targets,mode)
+                                       targets)
     
     tensorboard_dir = 'tensorboard'
     if not os.path.exists(tensorboard_dir):
@@ -123,8 +125,8 @@ def drive():
                     val_satd_s.append(float(val_satd))
                     val_mse_s.append(float(val_mse))
                 # print(val_satd_s)
-                print("[%s_m%d_s%d] step %8d, Train SATD %.4f, Train MSE %.4f, Val SATD %.4f, Val MSE %.6f" % (
-                    model_module_name, mode, num_scale, i, np.mean(metrics[:,0]), np.mean(metrics[:,1]), np.mean(val_satd_s), np.mean(val_mse_s)))
+                print("Model name: %s, step %8d, Train SATD %.4f, Train MSE %.4f, Val SATD %.4f, Val MSE %.6f" % (
+                    model_module_name, i, np.mean(metrics[:,0]), np.mean(metrics[:,1]), np.mean(val_satd_s), np.mean(val_mse_s)))
                 
             iter_data, iter_label = next(data_gen)
             # print(iter_data.shape)
@@ -138,7 +140,7 @@ def drive():
             
             if i % 1000 == 0:
                 save_path = saver.save(sess, os.path.join(
-                    checkpoint_dir, "%s_%06d_m%d_s%d.ckpt" % (model_module_name,i,mode,num_scale)))
+                    checkpoint_dir, "%s_%06d.ckpt" % (model_module_name,i)))
             if i == 0:
                 writer.add_graph(sess.graph)
 

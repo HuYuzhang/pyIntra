@@ -65,25 +65,24 @@ def inter_rnn(input_tensor, num, scope, batch_size, channels=8, units=8):
 
 
 
-def build_model(input_tensor, target_tensor, params, mode=3):
+def build_model(input_tensor, target_tensor, params):
 
-    print("mode : %d" % (mode))
     print(input_tensor.shape)
     batch_size = params['batch_size']
 
     num_scale = params['num_scale']
 
-    input_layer = tf.reshape(input_tensor, [-1, num_scale*mode * num_scale*mode])
+    input_layer = tf.reshape(input_tensor, [-1, 3072])
 
-    _fc1 = tf.layers.dense(input_layer, 1024, name='fc1')
+    _fc1 = tf.layers.dense(input_layer, 3072, name='fc1')
 
     fc1 = tf.keras.layers.PReLU(shared_axes=[1], name='relu1')(_fc1)
 
-    _fc2 = tf.layers.dense(fc1, 1024, name='fc2')
+    _fc2 = tf.layers.dense(fc1, 3072, name='fc2')
 
     fc2 = tf.keras.layers.PReLU(shared_axes=[1], name='relu2')(_fc2)
 
-    _fc3 = tf.layers.dense(fc2, 1024, name='fc3')
+    _fc3 = tf.layers.dense(fc2, 3072, name='fc3')
 
     fc3 = tf.keras.layers.PReLU(shared_axes=[1], name='relu3')(_fc3)
 
@@ -91,25 +90,7 @@ def build_model(input_tensor, target_tensor, params, mode=3):
 
     fc4 = tf.keras.layers.PReLU(shared_axes=[1], name='relu4')(_fc4)
 
-    _fc5 = tf.layers.dense(fc4, 1024, name='fc5')
-
-    fc5 = tf.keras.layers.PReLU(shared_axes=[1], name='relu5')(_fc5)
-
-    _fc6 = tf.layers.dense(fc5, 1024, name='fc6')
-
-    fc6 = tf.keras.layers.PReLU(shared_axes=[1], name='relu6')(_fc6)
-
-    _fc7 = tf.layers.dense(fc6, 1024, name='fc7')
-
-    fc7 = tf.keras.layers.PReLU(shared_axes=[1], name='relu7')(_fc7)
-
-    _fc8 = tf.layers.dense(fc7, 1024, name='fc8')
-
-    fc8 = tf.keras.layers.PReLU(shared_axes=[1], name='relu8')(_fc8)
-
-    fco = tf.layers.dense(fc8, 64, name='fco')
-
-    conv11 = tf.reshape(fco, (-1,8,8,1))
+    conv11 = tf.reshape(fc4, (-1,32,32,1))
 
     def SATD(y_true, y_pred):
             H_8x8 = np.array(
