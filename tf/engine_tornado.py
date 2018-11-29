@@ -31,7 +31,7 @@ def drive():
         weights_name = sys.argv[5]
     print(weights_name)
 
-    h5_path = ''
+    h5_path = '../../train/planar.h5'
     # load data
 
     hf = None
@@ -48,8 +48,8 @@ def drive():
         pass
         
     print("Loading data")
-    x = np.array(hf['data'], dtype=np.float32)/255.
-    y = np.array(hf['label'], dtype=np.float32)/255.
+    x = np.array(hf['data'], dtype=np.float32)
+    y = np.array(hf['label'], dtype=np.float32)
 
     length = x.shape[0]
     array_list = list(range(0, length))
@@ -60,11 +60,11 @@ def drive():
     val_data = x[array_list[bar:], :, :, :]
     train_label = y[array_list[:bar], :, :, :]
     val_label = y[array_list[bar:], :, :, :]
-    train_data = train_data.transpose([0,2,3,1])
-    val_data = val_data.transpose([0,2,3,1])
+    # train_data = train_data.transpose([0,2,3,1])
+    # val_data = val_data.transpose([0,2,3,1])
 
-    train_label = train_label.transpose([0,2,3,1])
-    val_label = val_label.transpose([0,2,3,1])
+    # train_label = train_label.transpose([0,2,3,1])
+    # val_label = val_label.transpose([0,2,3,1])
     print(bar)
 
     def train_generator():
@@ -77,8 +77,8 @@ def drive():
         for i in range(0, length-bar, batch_size)[:-1]:
             yield val_data[i:i+batch_size, :, :, :], val_label[i:i+batch_size, :, :, :]
 
-    inputs = tf.placeholder(tf.float32, [batch_size, 64, 64, 1])
-    targets = tf.placeholder(tf.float32, [batch_size, 32, 32, 1])
+    inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
+    targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
 
     # build model
     train_op, satd_loss, mse_loss = tf_build_model(model_module_name,
@@ -89,13 +89,15 @@ def drive():
                                        inputs,
                                        targets)
     
-    tensorboard_dir = 'tensorboard'
+    tensorboard_dir = '../../tensorboard'
     if not os.path.exists(tensorboard_dir):
         os.makedirs(tensorboard_dir)
 
     writer = tf.summary.FileWriter(tensorboard_dir)
     saver = tf.train.Saver(max_to_keep=30)
-    checkpoint_dir = './ckpt/'
+    checkpoint_dir = '../../ckpt/'
+    if not os.path.exists(checkpoint_dir):
+        os.makedirs(checkpoint_dir)
     with tf.Session() as sess:
         if weights_name is not None:
             saver.restore(sess, weights_name)
@@ -119,11 +121,20 @@ def drive():
                 val_satd_s = []
                 val_mse_s = []
                 val_gen = val_generator()
+                # for v_data, v_label in val_gen:
+                #     val_satd, val_mse = sess.run([satd_loss, mse_loss], feed_dict={
+                #                                  inputs: v_data, targets: v_label})
+                #     val_satd_s.append(float(val_satd))
+                #     val_mse_s.append(float(val_mse))
+
+                # ----------------- for test-------------------
                 for v_data, v_label in val_gen:
-                    val_satd, val_mse = sess.run([satd_loss, mse_loss], feed_dict={
+                    val_mse = sess.run(mse_loss, feed_dict={
                                                  inputs: v_data, targets: v_label})
-                    val_satd_s.append(float(val_satd))
+                    # val_satd_s.append(float(val_satd))
                     val_mse_s.append(float(val_mse))
+                #----------------------------------------------
+
                 # print(val_satd_s)
                 print("Model name: %s, step %8d, Train SATD %.4f, Train MSE %.4f, Val SATD %.4f, Val MSE %.6f" % (
                     model_module_name, i, np.mean(metrics[:,0]), np.mean(metrics[:,1]), np.mean(val_satd_s), np.mean(val_mse_s)))
@@ -131,11 +142,16 @@ def drive():
             iter_data, iter_label = next(data_gen)
             # print(iter_data.shape)
             feed_dict = {inputs: iter_data, targets: iter_label}
-            _, satd, mse = sess.run([train_op, satd_loss, mse_loss],
+            # _, satd, mse = sess.run([train_op, satd_loss, mse_loss],
+            #                         feed_dict=feed_dict,
+            #                         options=options,
+            #                         run_metadata=run_metadata)
+
+            _, mse = sess.run([train_op, mse_loss],
                                     feed_dict=feed_dict,
                                     options=options,
                                     run_metadata=run_metadata)
-            metrics[i%interval,0] = satd
+            # metrics[i%interval,0] = satd
             metrics[i%interval,1] = mse
             
             if i % 1000 == 0:

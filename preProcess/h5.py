@@ -27,10 +27,10 @@ class h5Handler(object):
             cursize = h5data.shape
             addsize = datas.shape
 
-            # --------------for debug------------------
-            print('-------now begin to add data------')
-            print(cursize)
-            # --------------for debug------------------
+            # # --------------for debug------------------
+            # print('-------now begin to add data------')
+            # print(cursize)
+            # # --------------for debug------------------
 
             h5data.resize([cursize[0] + addsize[0], 3072, 1, 1])
             h5label.resize([cursize[0] + addsize[0], 1024, 1, 1])

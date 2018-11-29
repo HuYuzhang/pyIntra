@@ -1,15 +1,16 @@
 import numpy as np
 import cv2 as cv
 from h5 import h5Handler
+from mylib import read_frame
 
 dump_path = 'dump_dir.txt'
 dec_path = '../../raw_data/dec.yuv'
 gt_path = '../../raw_data/video.yuv'
 target_path = '../img/'
 
-planar_h5_path = ''
-dc_h5_path = ''
-angle_h5_path = ''
+planar_h5_path = '../../train/planar.h5'
+dc_h5_path = '../../train/dc.h5'
+angle_h5_path = '../../train/angle.h5'
 
 height = 1024
 width = 1792
@@ -21,22 +22,14 @@ dc_mode = 1
 angle_mode = 2
 
 
-# Assume that our video is I420
-def read_frame(filename, idx, _height, _width):
-    pixel_num = _height * _width
-    byte_num = int(pixel_num * 3 / 2)
-    # print(byte_num)
-    with open(filename, 'rb') as f:
-        f.seek(idx * byte_num, 0)
-        data = np.fromfile(f, dtype=np.uint8, count=pixel_num)
-        return data.reshape([_height, _width])
 
 def filter_sample(img, threshold):
-    var = np.var(img)
-    if var > threshold:
-        return True
-    else:
-        return False
+    # var = np.var(img)
+    # if var > threshold:
+    #     return True
+    # else:
+    #     return False
+    pass
 
 input = np.zeros([1, 3072, 1, 1])
 label = np.zeros([1, 1024, 1, 1])
@@ -74,8 +67,8 @@ with open(dump_path) as f:
         f_id = int(f_id)
         mode = int(mode)
         # --------------for debug------------------
-        # if f_id > 0:
-        #     break
+        if f_id > 5:
+            break
         # --------------for debug------------------
 
         if y == 0 and x == 0:
@@ -145,8 +138,9 @@ with open(dump_path) as f:
             print('In this frame %d: planar: %d, dc: %d, angle: %d'%(f_id, pc, dc, ac))
 
 
-print(np.mean(planarvars), len(planarvars))
-print(np.mean(dcvars), len(dcvars))
-print(np.mean(anglevars), len(anglevars))
+print('------------ print statistic data -------------')
+print('planar var: ', np.mean(planarvars), len(planarvars))
+print('dc var: ', np.mean(dcvars), len(dcvars))
+print('angle var: ', np.mean(anglevars), len(anglevars))
 
 

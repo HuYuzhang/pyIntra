@@ -69,9 +69,8 @@ def build_model(input_tensor, target_tensor, params):
 
     print(input_tensor.shape)
     batch_size = params['batch_size']
-
-    num_scale = params['num_scale']
-
+    lr = params['learning_rate']
+    
     input_layer = tf.reshape(input_tensor, [-1, 3072])
 
     _fc1 = tf.layers.dense(input_layer, 3072, name='fc1')
@@ -89,9 +88,13 @@ def build_model(input_tensor, target_tensor, params):
     _fc4 = tf.layers.dense(fc3, 1024, name='fc4')
 
     fc4 = tf.keras.layers.PReLU(shared_axes=[1], name='relu4')(_fc4)
-
-    conv11 = tf.reshape(fc4, (-1,32,32,1))
-
+    
+    conv11 = tf.reshape(fc4, (-1,1024, 1, 1))
+    # print(target_tensor.shape, '------------')
+    # exit(0)
+    # print(type(conv11))
+    # print(conv11.shape)
+    # exit(0)
     def SATD(y_true, y_pred):
             H_8x8 = np.array(
                 [[1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.],
@@ -111,12 +114,14 @@ def build_model(input_tensor, target_tensor, params):
 
             diff = tf.reshape(y_true - y_pred, (-1, 8, 8))
 
-            return tf.reduce_mean(tf.sqrt(tf.square(tf.matmul(tf.matmul(TH1, diff), TH1)) + 0.0001))
+            #return tf.reduce_mean(tf.sqrt(tf.square(tf.matmul(tf.matmul(TH1, diff), TH1)) + 0.0001))
+            return 0
 
 
     mse_loss = tf.reduce_mean(tf.square((target_tensor-conv11)))
     satd_loss = SATD(conv11, target_tensor)
-    loss = satd_loss
+    # loss = satd_loss
+    loss = mse_loss
 
     global_step = tf.Variable(0, trainable=False)
     learning_rate = tf.train.exponential_decay(params['learning_rate'], global_step=global_step, decay_steps = 10000, decay_rate=0.7)
