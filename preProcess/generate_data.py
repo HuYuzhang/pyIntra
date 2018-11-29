@@ -134,14 +134,14 @@ with open(dump_path) as f:
             # now begin to write data to the h5 file
             if f_id == 0:
                 # create mode
-                planar_handler.write(planarinput(:pc,:,:,:), planarlabel(:pc,:,:,:), create=True)
-                dc_handler.write(dcinput(:dc,:,:,:), dclabel(:dc,:,:,:), create=True)
-                angle_handler.write(angleinput(:ac,:,:,:), anglelabel(:ac,:,:,:), create=True)
+                planar_handler.write(planarinput[:pc,:,:,:], planarlabel[:pc,:,:,:], create=True)
+                dc_handler.write(dcinput[:dc,:,:,:], dclabel[:dc,:,:,:], create=True)
+                angle_handler.write(angleinput[:ac,:,:,:], anglelabel[:ac,:,:,:], create=True)
             else:
                 # append mode
-                planar_handler.write(planarinput(:pc,:,:,:), planarlabel(:pc,:,:,:), create=False)
-                dc_handler.write(dcinput(:dc,:,:,:), dclabel(:dc,:,:,:), create=False)
-                angle_handler.write(angleinput(:ac,:,:,:), anglelabel(:ac,:,:,:), create=False)
+                planar_handler.write(planarinput[:pc,:,:,:], planarlabel[:pc,:,:,:], create=False)
+                dc_handler.write(dcinput[:dc,:,:,:], dclabel[:dc,:,:,:], create=False)
+                angle_handler.write(angleinput[:ac,:,:,:], anglelabel[:ac,:,:,:], create=False)
             print('In this frame %d: planar: %d, dc: %d, angle: %d'%(f_id, pc, dc, ac))
 
 
