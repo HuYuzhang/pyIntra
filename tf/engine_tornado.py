@@ -46,8 +46,8 @@ def drive():
     
     hf = h5py.File(h5_path)
 
-    with tf.Session() as sess:
-        pass
+    #with tf.Session() as sess:
+    #    pass
         
     print("Loading data")
     x = np.array(hf['data'], dtype=np.float32)
@@ -148,7 +148,7 @@ def drive():
                 mse_summary = tf.summary.scalar('mse', valid_mse_loss)
                 valid_summary = tf.summary.merge([satd_summary, mse_summary])
                 rs = sess.run(valid_summary)
-                test_writer.add_summary(rs, i)
+                valid_writer.add_summary(rs, i)
                 # ------------ Now try to write data to the test_writer
                 
                 # ------------ end writing --------------------
