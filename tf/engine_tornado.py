@@ -25,13 +25,14 @@ def drive():
     block_size = 8
     model_module_name = sys.argv[2]
     weights_name = None
-    init_lr = float(sys.argv[3])
-    batch_size = int(sys.argv[4])
-    if len(sys.argv) == 6:
-        weights_name = sys.argv[5]
+    train_mode = sys.argv[3]
+    init_lr = float(sys.argv[4])
+    batch_size = int(sys.argv[5])
+    if len(sys.argv) == 7:
+        weights_name = sys.argv[6]
     print(weights_name)
 
-    h5_path = '../../train/planar.h5'
+    h5_path = '../../train/' + train_mode + '.h5'
     # load data
 
     hf = None
@@ -89,13 +90,13 @@ def drive():
                                        inputs,
                                        targets)
     
-    tensorboard_dir = '../../tensorboard/planar'
+    tensorboard_dir = '../../tensorboard/' + train_mode + '/'
     if not os.path.exists(tensorboard_dir):
         os.makedirs(tensorboard_dir)
 
     writer = tf.summary.FileWriter(tensorboard_dir)
     saver = tf.train.Saver(max_to_keep=30)
-    checkpoint_dir = '../../model/planar/'
+    checkpoint_dir = '../../model/' + train_mode + '/'
     if not os.path.exists(checkpoint_dir):
         os.makedirs(checkpoint_dir)
     with tf.Session() as sess:
