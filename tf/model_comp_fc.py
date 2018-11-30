@@ -65,7 +65,7 @@ def inter_rnn(input_tensor, num, scope, batch_size, channels=8, units=8):
 
 
 
-def build_model(input_tensor, target_tensor, params):
+def build_model(input_tensor, target_tensor, params, freq=False):
 
     print(input_tensor.shape)
     batch_size = params['batch_size']
@@ -89,12 +89,7 @@ def build_model(input_tensor, target_tensor, params):
 
     fc4 = tf.keras.layers.PReLU(shared_axes=[1], name='relu4')(_fc4)
     
-    conv11 = tf.reshape(fc4, (-1,1024, 1, 1))
-    # print(target_tensor.shape, '------------')
-    # exit(0)
-    # print(type(conv11))
-    # print(conv11.shape)
-    # exit(0)
+
     def SATD(y_true, y_pred):
             H_8x8 = np.array(
                 [[1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.],
@@ -126,15 +121,49 @@ def build_model(input_tensor, target_tensor, params):
             return tf.reduce_mean(tf.sqrt(tf.square(tf.matmul(tf.matmul(TH1, diff), TH1)) + 0.0001))
 
 
-    mse_loss = tf.reduce_mean(tf.square((target_tensor-conv11)))
-    satd_loss = SATD(conv11, target_tensor)
-    loss = satd_loss
-    # loss = mse_loss
+    if freq:
+        dct = np.zeros((1,32,32), dtype=np.float32)
+        for i in range(0,32):
+            for j in range(0,32):
+                a = 0.0
+                if i == 0:
+                    a = np.sqrt(1/32.)
+                else:
+                    a = np.sqrt(2/32.)
+                dct[0,i,j] = a * np.cos(np.pi * (j + 0.5) * i / 32.)
+        idct = dct.transpose([0. 2. 1])
+        tf_dct = tf.constant(dct, name='dct')
+        tf_idct = tf.constant(idct, name='idct')
+        # ------------------ finish initilize the dct matrix -----------------
+        freq_tensor = tf.reshape(fc4, (-1, 32, 32))
+        batch_dct = tf.tile(tf_dct, [tf.shape(input_tensor)[0],1,1],name='title_dct')
+        batch_idct = tf.tile(tf_idct, [tf.shape(input_tensor)[0],1,1],name='title_idct')
+        recon = tf.reshape(tf.matmul(tf.matmul(batch_idct, freq_tensor, name='mul_dct1'), batch_dct, name='mul_idct1'), (-1, 1024, 1, 1), name='reshape_recon')
+        mse_loss = tf.reduce_mean(tf.square((target_tensor-recon)))
+        satd_loss = SATD(recon, target_tensor)
+        loss = satd_loss
+        # loss = mse_loss
 
-    global_step = tf.Variable(0, trainable=False)
-    learning_rate = tf.train.exponential_decay(params['learning_rate'], global_step=global_step, decay_steps = 10000, decay_rate=0.7)
-    optimizer = tf.train.AdamOptimizer(learning_rate=params['learning_rate'])
-    train_op = optimizer.minimize(loss=loss, global_step=tf.train.get_global_step())
+        global_step = tf.Variable(0, trainable=False)
+        learning_rate = tf.train.exponential_decay(params['learning_rate'], global_step=global_step, decay_steps = 10000, decay_rate=0.7)
+        optimizer = tf.train.AdamOptimizer(learning_rate=params['learning_rate'])
+        train_op = optimizer.minimize(loss=loss, global_step=tf.train.get_global_step())
 
 
-    return train_op, satd_loss, mse_loss
+        return train_op, satd_loss, mse_loss
+
+
+    else:
+        conv11 = tf.reshape(fc4, (-1,1024, 1, 1))
+        mse_loss = tf.reduce_mean(tf.square((target_tensor-conv11)))
+        satd_loss = SATD(conv11, target_tensor)
+        loss = satd_loss
+        # loss = mse_loss
+
+        global_step = tf.Variable(0, trainable=False)
+        learning_rate = tf.train.exponential_decay(params['learning_rate'], global_step=global_step, decay_steps = 10000, decay_rate=0.7)
+        optimizer = tf.train.AdamOptimizer(learning_rate=params['learning_rate'])
+        train_op = optimizer.minimize(loss=loss, global_step=tf.train.get_global_step())
+
+
+        return train_op, satd_loss, mse_loss
