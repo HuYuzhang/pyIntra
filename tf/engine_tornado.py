@@ -57,7 +57,7 @@ def drive():
     array_list = list(range(0, length))
     np.random.shuffle(array_list)
     bar = int(length*0.95)
-
+    print('-------', bar, length)
     train_data = x[array_list[:bar], :, :, :]
     val_data = x[array_list[bar:], :, :, :]
     train_label = y[array_list[:bar], :, :, :]
@@ -133,7 +133,8 @@ def drive():
         merged = tf.summary.merge([train_satd_summary, train_mse_summary])
 
         #sub1--------------------------------here for valid mean
-        valid_size = int(len(range(0, bar, batch_size)))
+        valid_size = int(len(range(0, length - bar, batch_size)[:-1]))
+        print(valid_size)
         valid_mse_input = tf.placeholder(tf.float32, [valid_size])
         valid_satd_input = tf.placeholder(tf.float32, [valid_size])
         valid_mse_mean = tf.reduce_mean(valid_mse_input)
@@ -145,7 +146,7 @@ def drive():
 
         # --------------- part for tensorboard----------------
 
-        for i in range(60000):
+        for i in range(100000):
             if i % interval == 0:
                 val_satd_s = []
                 val_mse_s = []
@@ -155,8 +156,8 @@ def drive():
                                                  inputs: v_data, targets: v_label})
                     val_satd_s.append(float(val_satd))
                     val_mse_s.append(float(val_mse))
-
-                rs = sess.run(valid_summary, feed_dict={
+                print(len(val_mse_s))
+                rs = sess.run(valid_merged, feed_dict={
                     valid_mse_input: val_mse_s, valid_satd_input: val_satd_s
                 })
                 valid_writer.add_summary(rs, i)
@@ -184,8 +185,8 @@ def drive():
                                     feed_dict=feed_dict,
                                     options=options,
                                     run_metadata=run_metadata)
-
-            train_writer.add_summary(rs, i)
+            if i % interval == 0:
+                train_writer.add_summary(rs, i)
 
             metrics[i%interval,0] = satd
             metrics[i%interval,1] = mse
