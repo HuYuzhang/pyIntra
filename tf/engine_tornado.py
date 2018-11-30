@@ -21,6 +21,7 @@ def tf_build_model(module_name, weights_name, params, input_tensor, output_tenso
 
 
 def drive():
+    print(sys.argv)
     global batch_size
     block_size = 8
     model_module_name = sys.argv[2]
