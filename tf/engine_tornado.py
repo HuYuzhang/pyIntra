@@ -95,7 +95,6 @@ def drive():
     if not os.path.exists(tensorboard_dir):
         os.makedirs(tensorboard_dir)
 
-    writer = tf.summary.FileWriter(tensorboard_dir)
     saver = tf.train.Saver(max_to_keep=30)
     checkpoint_dir = '../../model/' + train_mode + '/'
     if not os.path.exists(checkpoint_dir):
@@ -118,6 +117,12 @@ def drive():
         data_gen = train_generator()
         interval = 500
         metrics = np.zeros((interval,3))
+
+        # --------------- part for tensorboard----------------
+        writer = tf.summary.FileWriter(tensorboard_dir, sess.graph)
+        merged = tf.summary.merge_all()
+        # --------------- part for tensorboard----------------
+
         for i in range(60000):
             if i % interval == 0:
                 val_satd_s = []
@@ -141,6 +146,7 @@ def drive():
                 print("Model name: %s, step %8d, Train SATD %.4f, Train MSE %.4f, Val SATD %.4f, Val MSE %.6f" % (
                     model_module_name, i, np.mean(metrics[:,0]), np.mean(metrics[:,1]), np.mean(val_satd_s), np.mean(val_mse_s)))
                 
+            # ------------------- Here is the training part ---------------
             iter_data, iter_label = next(data_gen)
             # print(iter_data.shape)
             feed_dict = {inputs: iter_data, targets: iter_label}
@@ -149,14 +155,15 @@ def drive():
                                     options=options,
                                     run_metadata=run_metadata)
 
+            rs = sess.run(merged)
+            writer.add_summary(rs, i)
+
             metrics[i%interval,0] = satd
             metrics[i%interval,1] = mse
             
-            if i % 1000 == 0:
+            if i % 10000 == 0:
                 save_path = saver.save(sess, os.path.join(
                     checkpoint_dir, "%s_%06d.ckpt" % (model_module_name,i)))
-            if i == 0:
-                writer.add_graph(sess.graph)
 
 
 if __name__ == '__main__':
