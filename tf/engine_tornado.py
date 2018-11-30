@@ -120,8 +120,8 @@ def drive():
 
         # --------------- part for tensorboard----------------
         writer = tf.summary.FileWriter(tensorboard_dir, sess.graph)
-        tf.summary.scalar('SATD loss', satd_loss)
-        tf.summary.scalar('MSE loss', mse_loss)
+        tf.summary.scalar('train/SATD loss', satd_loss)
+        tf.summary.scalar('train/MSE loss', mse_loss)
         merged = tf.summary.merge_all()
         # --------------- part for tensorboard----------------
 
@@ -152,12 +152,11 @@ def drive():
             iter_data, iter_label = next(data_gen)
             # print(iter_data.shape)
             feed_dict = {inputs: iter_data, targets: iter_label}
-            _, satd, mse = sess.run([train_op, satd_loss, mse_loss],
+            _, satd, mse, rs = sess.run([train_op, satd_loss, mse_loss, merged],
                                     feed_dict=feed_dict,
                                     options=options,
                                     run_metadata=run_metadata)
 
-            rs = sess.run(merged)
             writer.add_summary(rs, i)
 
             metrics[i%interval,0] = satd
