@@ -16,7 +16,7 @@ def tf_build_model(module_name, weights_name, params, input_tensor, output_tenso
     with tf.variable_scope('main_full', reuse=tf.AUTO_REUSE):
         model_module = __import__(module_name)
         train_op, satd_op, mse_op = model_module.build_model(
-            input_tensor, output_tensor, params)
+            input_tensor, output_tensor, params, freq=True)
         return train_op, satd_op, mse_op
 
 
@@ -128,8 +128,8 @@ def drive():
         # --------------- part for tensorboard----------------
         train_writer = tf.summary.FileWriter(tensorboard_train_dir, sess.graph)
         valid_writer = tf.summary.FileWriter(tensorboard_valid_dir, sess.graph)
-        train_satd_summary = tf.summary.scalar('SATD loss', satd_loss)
-        train_mse_summary = tf.summary.scalar('MSE loss', mse_loss)
+        train_satd_summary = tf.summary.scalar(train_mode + ' SATD loss', satd_loss)
+        train_mse_summary = tf.summary.scalar(train_mode + ' MSE loss', mse_loss)
         merged = tf.summary.merge([train_satd_summary, train_mse_summary])
 
         #sub1--------------------------------here for valid mean
@@ -139,14 +139,14 @@ def drive():
         valid_satd_input = tf.placeholder(tf.float32, [valid_size])
         valid_mse_mean = tf.reduce_mean(valid_mse_input)
         valid_satd_mean = tf.reduce_mean(valid_satd_input)
-        valid_mse_summary = tf.summary.scalar('MSE loss', valid_mse_mean)
-        valid_satd_summary = tf.summary.scalar('SATD loss', valid_satd_mean)
+        valid_mse_summary = tf.summary.scalar(train_mode + ' MSE loss', valid_mse_mean)
+        valid_satd_summary = tf.summary.scalar(train_mode + ' SATD loss', valid_satd_mean)
         valid_merged = tf.summary.merge([valid_mse_summary, valid_satd_summary])
         #sub1--------------------------------for valid mean
 
         # --------------- part for tensorboard----------------
 
-        for i in range(100000):
+        for i in range(200000):
             if i % interval == 0:
                 val_satd_s = []
                 val_mse_s = []

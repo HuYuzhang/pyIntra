@@ -131,7 +131,7 @@ def build_model(input_tensor, target_tensor, params, freq=False):
                 else:
                     a = np.sqrt(2/32.)
                 dct[0,i,j] = a * np.cos(np.pi * (j + 0.5) * i / 32.)
-        idct = dct.transpose([0. 2. 1])
+        idct = dct.transpose([0, 2, 1])
         tf_dct = tf.constant(dct, name='dct')
         tf_idct = tf.constant(idct, name='idct')
         # ------------------ finish initilize the dct matrix -----------------
