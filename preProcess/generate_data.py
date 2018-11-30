@@ -38,12 +38,12 @@ dcvars = []
 planarvars = []
 anglevars = []
 
-planarinput = np.zeros([1500, 3072, 1, 1])
-planarlabel = np.zeros([1500, 1024, 1, 1])
-dcinput =np.zeros([1500, 3072, 1, 1])
-dclabel = np.zeros([1500, 1024, 1, 1])
-angleinput = np.zeros([1500, 3072, 1, 1])
-anglelabel = np.zeros([1500, 1024, 1, 1])
+planarinput = np.zeros([2000, 3072, 1, 1])
+planarlabel = np.zeros([2000, 1024, 1, 1])
+dcinput =np.zeros([2000, 3072, 1, 1])
+dclabel = np.zeros([2000, 1024, 1, 1])
+angleinput = np.zeros([2000, 3072, 1, 1])
+anglelabel = np.zeros([2000, 1024, 1, 1])
 
 planar_handler = h5Handler(planar_h5_path)
 dc_handler = h5Handler(dc_h5_path)
@@ -67,8 +67,8 @@ with open(dump_path) as f:
         f_id = int(f_id)
         mode = int(mode)
         # --------------for debug------------------
-        if f_id > 5:
-            break
+       	#if f_id > 5:
+        #   break
         # --------------for debug------------------
 
         if y == 0 and x == 0:

@@ -89,13 +89,13 @@ def drive():
                                        inputs,
                                        targets)
     
-    tensorboard_dir = '../../tensorboard'
+    tensorboard_dir = '../../tensorboard/planar'
     if not os.path.exists(tensorboard_dir):
         os.makedirs(tensorboard_dir)
 
     writer = tf.summary.FileWriter(tensorboard_dir)
     saver = tf.train.Saver(max_to_keep=30)
-    checkpoint_dir = '../../ckpt/'
+    checkpoint_dir = '../../model/planar/'
     if not os.path.exists(checkpoint_dir):
         os.makedirs(checkpoint_dir)
     with tf.Session() as sess:
