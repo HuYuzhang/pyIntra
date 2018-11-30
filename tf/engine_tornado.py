@@ -121,19 +121,19 @@ def drive():
                 val_satd_s = []
                 val_mse_s = []
                 val_gen = val_generator()
-                # for v_data, v_label in val_gen:
-                #     val_satd, val_mse = sess.run([satd_loss, mse_loss], feed_dict={
-                #                                  inputs: v_data, targets: v_label})
-                #     val_satd_s.append(float(val_satd))
-                #     val_mse_s.append(float(val_mse))
-
-                # ----------------- for test-------------------
                 for v_data, v_label in val_gen:
-                    val_mse = sess.run(mse_loss, feed_dict={
+                    val_satd, val_mse = sess.run([satd_loss, mse_loss], feed_dict={
                                                  inputs: v_data, targets: v_label})
-                    # val_satd_s.append(float(val_satd))
+                    val_satd_s.append(float(val_satd))
                     val_mse_s.append(float(val_mse))
-                #----------------------------------------------
+
+                # # ----------------- for test-------------------
+                # for v_data, v_label in val_gen:
+                #     val_mse = sess.run(mse_loss, feed_dict={
+                #                                  inputs: v_data, targets: v_label})
+                #     # val_satd_s.append(float(val_satd))
+                #     val_mse_s.append(float(val_mse))
+                # #----------------------------------------------
 
                 # print(val_satd_s)
                 print("Model name: %s, step %8d, Train SATD %.4f, Train MSE %.4f, Val SATD %.4f, Val MSE %.6f" % (
@@ -142,16 +142,12 @@ def drive():
             iter_data, iter_label = next(data_gen)
             # print(iter_data.shape)
             feed_dict = {inputs: iter_data, targets: iter_label}
-            # _, satd, mse = sess.run([train_op, satd_loss, mse_loss],
-            #                         feed_dict=feed_dict,
-            #                         options=options,
-            #                         run_metadata=run_metadata)
-
-            _, mse = sess.run([train_op, mse_loss],
+            _, satd, mse = sess.run([train_op, satd_loss, mse_loss],
                                     feed_dict=feed_dict,
                                     options=options,
                                     run_metadata=run_metadata)
-            # metrics[i%interval,0] = satd
+
+            metrics[i%interval,0] = satd
             metrics[i%interval,1] = mse
             
             if i % 1000 == 0:

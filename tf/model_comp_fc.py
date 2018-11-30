@@ -107,21 +107,29 @@ def build_model(input_tensor, target_tensor, params):
                  [1., -1., -1.,  1., -1.,  1.,  1., -1.]],
                 dtype=np.float32
             )
+            H_target = np.zeros((1,32,32), dtype=np.float32)
+            H_target[0,0:8,8:16] = H_8x8
+            H_target[0,8:16,0:8] = H_8x8
+            H_target[0,8:16,8:16] = H_8x8
 
-            TH0 = tf.constant(H_8x8.reshape([1,8,8]))
+
+            H_target[0,16:32,0:16] = H_target[:, 0:16, 0:16]
+            H_target[0,0:16,16:32] = H_target[:, 0:16, 0:16]
+            H_target[0,16:32,16:32] = H_target[:, 0:16, 0:16]
+
+            TH0 = tf.constant(H_target)
 
             TH1 = tf.tile(TH0, (batch_size, 1, 1))
 
-            diff = tf.reshape(y_true - y_pred, (-1, 8, 8))
+            diff = tf.reshape(y_true - y_pred, (-1, 32, 32))
 
-            #return tf.reduce_mean(tf.sqrt(tf.square(tf.matmul(tf.matmul(TH1, diff), TH1)) + 0.0001))
-            return 0
+            return tf.reduce_mean(tf.sqrt(tf.square(tf.matmul(tf.matmul(TH1, diff), TH1)) + 0.0001))
 
 
     mse_loss = tf.reduce_mean(tf.square((target_tensor-conv11)))
     satd_loss = SATD(conv11, target_tensor)
-    # loss = satd_loss
-    loss = mse_loss
+    loss = satd_loss
+    # loss = mse_loss
 
     global_step = tf.Variable(0, trainable=False)
     learning_rate = tf.train.exponential_decay(params['learning_rate'], global_step=global_step, decay_steps = 10000, decay_rate=0.7)
