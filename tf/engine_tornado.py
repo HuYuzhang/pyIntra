@@ -84,6 +84,8 @@ def drive():
     inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
     targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
 
+    
+
     # build model
     train_op, satd_loss, mse_loss = tf_build_model(model_module_name,
                                        weights_name,
@@ -126,9 +128,21 @@ def drive():
         # --------------- part for tensorboard----------------
         train_writer = tf.summary.FileWriter(tensorboard_train_dir, sess.graph)
         valid_writer = tf.summary.FileWriter(tensorboard_valid_dir, sess.graph)
-        tf.summary.scalar('SATD loss', satd_loss)
-        tf.summary.scalar('MSE loss', mse_loss)
-        merged = tf.summary.merge_all()
+        train_satd_summary = tf.summary.scalar('SATD loss', satd_loss)
+        train_mse_summary = tf.summary.scalar('MSE loss', mse_loss)
+        merged = tf.summary.merge([train_satd_summary, train_mse_summary])
+
+        #sub1--------------------------------here for valid mean
+        valid_size = int(len(range(0, bar, batch_size)))
+        valid_mse_input = tf.placeholder(tf.float32, [valid_size])
+        valid_satd_input = tf.placeholder(tf.float32, [valid_size])
+        valid_mse_mean = tf.reduce_mean(valid_mse_input)
+        valid_satd_mean = tf.reduce_mean(valid_satd_input)
+        valid_mse_summary = tf.summary.scalar('MSE loss', valid_mse_mean)
+        valid_satd_summary = tf.summary.scalar('SATD loss', valid_satd_mean)
+        valid_merged = tf.summary.merge([valid_mse_summary, valid_satd_summary])
+        #sub1--------------------------------for valid mean
+
         # --------------- part for tensorboard----------------
 
         for i in range(60000):
@@ -142,12 +156,9 @@ def drive():
                     val_satd_s.append(float(val_satd))
                     val_mse_s.append(float(val_mse))
 
-                valid_satd_loss = tf.reduce_mean(val_satd_s)
-                valid_mse_loss = tf.reduce_mean(val_mse_s)
-                satd_summary = tf.summary.scalar('SATD', valid_satd_loss)
-                mse_summary = tf.summary.scalar('mse', valid_mse_loss)
-                valid_summary = tf.summary.merge([satd_summary, mse_summary])
-                rs = sess.run(valid_summary)
+                rs = sess.run(valid_summary, feed_dict={
+                    valid_mse_input: val_mse_s, valid_satd_input: val_satd_s
+                })
                 valid_writer.add_summary(rs, i)
                 # ------------ Now try to write data to the test_writer
                 
