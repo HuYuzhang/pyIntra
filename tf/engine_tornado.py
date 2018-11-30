@@ -79,8 +79,10 @@ def drive():
         for i in range(0, length-bar, batch_size)[:-1]:
             yield val_data[i:i+batch_size, :, :, :], val_label[i:i+batch_size, :, :, :]
 
-    inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
-    targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
+    # inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
+    # targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
+    inputs = tf.placeholder(tf.float32, [None, 3072, 1, 1])
+    targets = tf.placeholder(tf.float32, [None, 1024, 1, 1])
 
     # build model
     train_op, satd_loss, mse_loss = tf_build_model(model_module_name,
@@ -91,9 +93,12 @@ def drive():
                                        inputs,
                                        targets)
     
-    tensorboard_dir = '../../tensorboard/' + train_mode + '/'
-    if not os.path.exists(tensorboard_dir):
-        os.makedirs(tensorboard_dir)
+    tensorboard_train_dir = '../../tensorboard/' + train_mode + '/train'
+    tensorboard_valid_dir = '../../tensorboard/' + train_mode + '/valid'
+    if not os.path.exists(tensorboard_train_dir):
+        os.makedirs(tensorboard_train_dir)
+    if not os.path.exists(tensorboard_valid_dir):
+        os.makedirs(tensorboard_valid_dir)
 
     saver = tf.train.Saver(max_to_keep=30)
     checkpoint_dir = '../../model/' + train_mode + '/'
@@ -119,9 +124,10 @@ def drive():
         metrics = np.zeros((interval,3))
 
         # --------------- part for tensorboard----------------
-        writer = tf.summary.FileWriter(tensorboard_dir, sess.graph)
-        tf.summary.scalar('train/SATD loss', satd_loss)
-        tf.summary.scalar('train/MSE loss', mse_loss)
+        train_writer = tf.summary.FileWriter(tensorboard_train_dir, sess.graph)
+        valid_writer = tf.summary.FileWriter(tensorboard_valid_dir, sess.graph)
+        tf.summary.scalar('SATD loss', satd_loss)
+        tf.summary.scalar('MSE loss', mse_loss)
         merged = tf.summary.merge_all()
         # --------------- part for tensorboard----------------
 
@@ -135,6 +141,13 @@ def drive():
                                                  inputs: v_data, targets: v_label})
                     val_satd_s.append(float(val_satd))
                     val_mse_s.append(float(val_mse))
+
+                val_satd, val_mse, rs = sess.run([satd_loss, mse_loss, merged], feed_dict={
+                                                inputs: val_data, targets: val_label})
+                test_writer.add_summary(rs, i)
+                # ------------ Now try to write data to the test_writer
+                
+                # ------------ end writing --------------------
 
                 # # ----------------- for test-------------------
                 # for v_data, v_label in val_gen:
@@ -157,7 +170,7 @@ def drive():
                                     options=options,
                                     run_metadata=run_metadata)
 
-            writer.add_summary(rs, i)
+            train_writer.add_summary(rs, i)
 
             metrics[i%interval,0] = satd
             metrics[i%interval,1] = mse
