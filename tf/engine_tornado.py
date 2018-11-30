@@ -81,8 +81,8 @@ def drive():
 
     # inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
     # targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
-    inputs = tf.placeholder(tf.float32, [None, 3072, 1, 1])
-    targets = tf.placeholder(tf.float32, [None, 1024, 1, 1])
+    inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
+    targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
 
     # build model
     train_op, satd_loss, mse_loss = tf_build_model(model_module_name,
@@ -142,8 +142,12 @@ def drive():
                     val_satd_s.append(float(val_satd))
                     val_mse_s.append(float(val_mse))
 
-                val_satd, val_mse, rs = sess.run([satd_loss, mse_loss, merged], feed_dict={
-                                                inputs: val_data, targets: val_label})
+                valid_satd_loss = tf.reduce_mean(val_satd_s)
+                valid_mse_loss = tf.reduce_mean(val_mse_s)
+                satd_summary = tf.summary.scalar('SATD', valid_satd_loss)
+                mse_summary = tf.summary.scalar('mse', valid_mse_loss)
+                valid_summary = tf.summary.merge([satd_summary, mse_summary])
+                rs = sess.run(valid_summary)
                 test_writer.add_summary(rs, i)
                 # ------------ Now try to write data to the test_writer
                 
