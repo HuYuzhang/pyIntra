@@ -120,6 +120,8 @@ def drive():
 
         # --------------- part for tensorboard----------------
         writer = tf.summary.FileWriter(tensorboard_dir, sess.graph)
+        tf.summary.scalar('SATD loss', satd_loss)
+        tf.summary.scalar('MSE loss', mse_loss)
         merged = tf.summary.merge_all()
         # --------------- part for tensorboard----------------
 
