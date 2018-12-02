@@ -14,7 +14,7 @@ batch_size = 1024
 epochs = 1000
 
 
-def tf_build_model(module_name, input_tensor, output_tensor, test=False, freq=False, params=None, weights_name=None):
+def tf_build_model(module_name, input_tensor, output_tensor, test=False, freq=False, params=None, _weights_name=None):
     with tf.variable_scope('main_full', reuse=tf.AUTO_REUSE):
         model_module = __import__(module_name)
         if test:
@@ -118,7 +118,7 @@ def drive():
                                        {'learning_rate': init_lr,
                                            'batch_size': batch_size
                                         },
-                                       weights_name=weights_name
+                                       _weights_name=weights_name
                                        )
     
     tensorboard_train_dir = '../../tensorboard/' + train_mode + '/train'
@@ -317,7 +317,7 @@ def run_test():
                                        targets,
                                        test=True,
                                        freq=True,
-                                       weights_name=weights_name
+                                       _weights_name=weights_name
                                        )
     print('finish build network')
     def val_generator():
@@ -358,19 +358,6 @@ def run_test():
     targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
 
     
-
-    # build model
-    train_op, satd_loss, mse_loss = tf_build_model(model_module_name,
-                                       inputs,
-                                       targets,
-                                       test=False,
-                                       freq=True,
-                                       params=
-                                       {'learning_rate': init_lr,
-                                           'batch_size': batch_size
-                                        },
-                                       weights_name=weights_name
-                                       )
     
     tensorboard_train_dir = '../../tensorboard/' + train_mode + '/train'
     tensorboard_valid_dir = '../../tensorboard/' + train_mode + '/valid'
