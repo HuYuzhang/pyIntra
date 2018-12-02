@@ -14,13 +14,16 @@ batch_size = 1024
 epochs = 1000
 
 
-def tf_build_model(module_name, weights_name, params, input_tensor, output_tensor):
+def tf_build_model(module_name, input_tensor, output_tensor, test=False, freq=False, params=None, weights_name=None):
     with tf.variable_scope('main_full', reuse=tf.AUTO_REUSE):
         model_module = __import__(module_name)
-        train_op, satd_op, mse_op = model_module.build_model(
-            input_tensor, output_tensor, params, freq=True)
-        return train_op, satd_op, mse_op
-
+        if test:
+            satd_op, mse_op, pred = model_module.build_model(
+                input_tensor, output_tensor, params=None, freq=freq, test=test)
+        else:
+            train_op, satd_op, mse_op = model_module.build_model(
+                input_tensor, output_tensor, params=params, freq=freq, test=test)
+            return train_op, satd_op, mse_op
 
 # gt and pred can be one sample or many sample
 def test_quality(gt, pred):
@@ -107,12 +110,16 @@ def drive():
 
     # build model
     train_op, satd_loss, mse_loss = tf_build_model(model_module_name,
-                                       weights_name,
+                                       inputs,
+                                       targets,
+                                       test=False,
+                                       freq=True,
+                                       params=
                                        {'learning_rate': init_lr,
                                            'batch_size': batch_size
                                         },
-                                       inputs,
-                                       targets)
+                                       weights_name=weights_name
+                                       )
     
     tensorboard_train_dir = '../../tensorboard/' + train_mode + '/train'
     tensorboard_valid_dir = '../../tensorboard/' + train_mode + '/valid'
@@ -218,11 +225,10 @@ def run_test():
     print(sys.argv)
     global batch_size
     block_size = 8
+    batch_size = 64
     model_module_name = sys.argv[2]
-    weights_name = Nonesys.argv[3]
-    train_mode = sys.argv[4]
-    batch_size = int(sys.argv[5])
-    
+    train_mode = sys.argv[3]
+    weights_name = sys.argv[4]
     print(weights_name)
 
     h5_path = '../../train/' + train_mode + '.h5'
@@ -233,36 +239,50 @@ def run_test():
     hf = h5py.File(h5_path)
         
     print("Loading data")
-    x = np.array(hf['data'], dtype=np.float32)
-    y = np.array(hf['label'], dtype=np.float32)
+    # now just test 1000 samples
+    x = np.array(hf['data'], dtype=np.float32)[:1000]
+    y = np.array(hf['label'], dtype=np.float32)[:1000]
 
     length = x.shape[0]
 
     
     satd_loss, mse_loss, pred = tf_build_model(model_module_name,
-                                       weights_name,
-                                       {'learning_rate': init_lr,
-                                           'batch_size': batch_size
-                                        },
                                        inputs,
-                                       targets, freq=True, test=True)
+                                       targets,
+                                       test=True,
+                                       freq=True
+                                       weights_name=weights_name
+                                       )
     def val_generator():
         for i in range(0, length, batch_size)[:-1]:
             yield x[i:i+batch_size, :, :, :], y[i:i+batch_size, :, :, :]
 
-    psnr_s = []
-    ssim_s = []
-    with tf.Session() as sess:
 
+    saver = tf.train.Saver()
+    with tf.Session() as tf:
+        if weights_name is None:
+            print('error!, no weights_name')
+            exit(0)
+        else:
+            saver.restore(sess, weights_name)
+            print('Successfully restore weights from file: ', weights_name)
+            
+        psnr_s = []
+        ssim_s = []
         for v_data, v_label in val_gen:
-            val_satd, val_mse, pred = sess.run([satd_loss, mse_loss, pred], feed_dict={
+            val_satd, val_mse, recon = sess.run([satd_loss, mse_loss, pred], feed_dict={
                                             inputs: v_data, targets: v_label})
-            pred = pred.reshape([-1, 32, 32]) * 255.0
+
+            recon = recon.reshape([-1, 32, 32]) * 255.0
             gt = v_label.reshape([-1, 32, 32]) * 255.0
-            val_psnr, val_ssim = test_quality(gt, pred)
+            val_psnr, val_ssim = test_quality(gt, recon)
+            print('-----------> tmp data, psnr: %f, ssim: %f<------------'%(val_psnr, val_ssim))
             psnr_s.append(val_psnr)
             ssim_s.append(val_ssim)
-        print('PSNR: ', np.mean(psnr_s), 'SSIM: ', np.mean(ssim_s))
+        print('Finish testing, now psnr is: %f, and ssim is: %f'%(np.mean(psnr_s), np.mean(ssim_s)))
+
+    
+                                        
 
 if __name__ == '__main__':
     tasks = {'train': drive, 'test': run_test}

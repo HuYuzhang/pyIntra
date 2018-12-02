@@ -64,12 +64,14 @@ def inter_rnn(input_tensor, num, scope, batch_size, channels=8, units=8):
         return connect
 
 
-
-def build_model(input_tensor, target_tensor, params, freq=False, test=False):
+def build_model(input_tensor, target_tensor, params=None, freq=False, test=False):
 
     print(input_tensor.shape)
-    batch_size = params['batch_size']
-    lr = params['learning_rate']
+
+    # in fact, in test stage, params is always None
+    if params is not None:
+        batch_size = params['batch_size']
+        lr = params['learning_rate']
     
     input_layer = tf.reshape(input_tensor, [-1, 3072])
 
@@ -142,32 +144,30 @@ def build_model(input_tensor, target_tensor, params, freq=False, test=False):
         mse_loss = tf.reduce_mean(tf.square((target_tensor-recon)))
         satd_loss = SATD(recon, target_tensor)
         loss = satd_loss
-        # loss = mse_loss
-
+        # now we just end the function because we don't need the train_op
+        if test:
+            return satd_loss, mse_loss, recon
+        
+        # for training, we need the train_op
         global_step = tf.Variable(0, trainable=False)
         learning_rate = tf.train.exponential_decay(params['learning_rate'], global_step=global_step, decay_steps = 10000, decay_rate=0.7)
         optimizer = tf.train.AdamOptimizer(learning_rate=params['learning_rate'])
         train_op = optimizer.minimize(loss=loss, global_step=tf.train.get_global_step())
-
-        if test:
-            return satd_loss, mse_loss, recon
-        else:
-            return train_op, satd_loss, mse_loss
+        return train_op, satd_loss, mse_loss
 
 
     else:
+        # prediction in pixel domain
         conv11 = tf.reshape(fc4, (-1,1024, 1, 1))
         mse_loss = tf.reduce_mean(tf.square((target_tensor-conv11)))
         satd_loss = SATD(conv11, target_tensor)
         loss = satd_loss
-        # loss = mse_loss
+        
+        if test:
+            return satd_loss, mse_loss, fc4
 
         global_step = tf.Variable(0, trainable=False)
         learning_rate = tf.train.exponential_decay(params['learning_rate'], global_step=global_step, decay_steps = 10000, decay_rate=0.7)
         optimizer = tf.train.AdamOptimizer(learning_rate=params['learning_rate'])
         train_op = optimizer.minimize(loss=loss, global_step=tf.train.get_global_step())
-
-        if test:
-            return satd_loss, mse_loss, fc4
-        else:
-            return train_op, satd_loss, mse_loss
+        return train_op, satd_loss, mse_loss
