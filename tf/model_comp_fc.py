@@ -65,7 +65,7 @@ def inter_rnn(input_tensor, num, scope, batch_size, channels=8, units=8):
 
 
 
-def build_model(input_tensor, target_tensor, params, freq=False):
+def build_model(input_tensor, target_tensor, params, freq=False, test=False):
 
     print(input_tensor.shape)
     batch_size = params['batch_size']
@@ -149,8 +149,10 @@ def build_model(input_tensor, target_tensor, params, freq=False):
         optimizer = tf.train.AdamOptimizer(learning_rate=params['learning_rate'])
         train_op = optimizer.minimize(loss=loss, global_step=tf.train.get_global_step())
 
-
-        return train_op, satd_loss, mse_loss
+        if test:
+            return satd_loss, mse_loss, recon
+        else:
+            return train_op, satd_loss, mse_loss
 
 
     else:
@@ -165,5 +167,7 @@ def build_model(input_tensor, target_tensor, params, freq=False):
         optimizer = tf.train.AdamOptimizer(learning_rate=params['learning_rate'])
         train_op = optimizer.minimize(loss=loss, global_step=tf.train.get_global_step())
 
-
-        return train_op, satd_loss, mse_loss
+        if test:
+            return satd_loss, mse_loss, fc4
+        else:
+            return train_op, satd_loss, mse_loss

@@ -45,9 +45,6 @@ def drive():
     #     print('./General_dataset_%d_partial.h5' % (num_scale))
     
     hf = h5py.File(h5_path)
-
-    #with tf.Session() as sess:
-    #    pass
         
     print("Loading data")
     x = np.array(hf['data'], dtype=np.float32)
@@ -195,8 +192,49 @@ def drive():
                 save_path = saver.save(sess, os.path.join(
                     checkpoint_dir, "%s_%06d.ckpt" % (model_module_name,i)))
 
+def run_test():
+    print(sys.argv)
+    global batch_size
+    block_size = 8
+    model_module_name = sys.argv[2]
+    weights_name = None
+    train_mode = sys.argv[3]
+    init_lr = float(sys.argv[4])
+    batch_size = int(sys.argv[5])
+    if len(sys.argv) == 7:
+        weights_name = sys.argv[6]
+    print(weights_name)
+
+    h5_path = '../../train/' + train_mode + '.h5'
+    # load data
+
+    hf = None
+    
+    hf = h5py.File(h5_path)
+        
+    print("Loading data")
+    x = np.array(hf['data'], dtype=np.float32)
+    y = np.array(hf['label'], dtype=np.float32)
+
+    length = x.shape[0]
+
+    
+    satd_loss, mse_loss, pred = tf_build_model(model_module_name,
+                                       weights_name,
+                                       {'learning_rate': init_lr,
+                                           'batch_size': batch_size
+                                        },
+                                       inputs,
+                                       targets, freq=True, test=True)
+    def val_generator():
+        for i in range(0, length, batch_size)[:-1]:
+            yield x[i:i+batch_size, :, :, :], y[i:i+batch_size, :, :, :]
+
+    for v_data, v_label in val_gen:
+        val_satd, val_mse = sess.run([satd_loss, mse_loss, pred], feed_dict={
+                                        inputs: v_data, targets: v_label})
 
 if __name__ == '__main__':
-    tasks = {'train': drive}
+    tasks = {'train': drive, 'test': run_test}
     task = sys.argv[1]
     tasks[task]()
