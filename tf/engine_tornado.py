@@ -39,7 +39,7 @@ def test_quality(gt, pred):
         # Here we will return the mean of the psnrs and ssims
         return np.mean(psnr_s), np.mean(ssim_s)
 
-    else if len(shape) == 2:
+    elif len(shape) == 2:
         qr = psnr(gt.astype(np.uint8), pred.astype(np.uint8))
         sm = ssim(gt.astype(np.uint8), pred.astype(np.uint8), multichannel = True)
         return qr, sm
@@ -244,20 +244,21 @@ def run_test():
     y = np.array(hf['label'], dtype=np.float32)[:1000]
 
     length = x.shape[0]
-
-    
+    inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
+    targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
     satd_loss, mse_loss, pred = tf_build_model(model_module_name,
                                        inputs,
                                        targets,
                                        test=True,
-                                       freq=True
+                                       freq=True,
                                        weights_name=weights_name
                                        )
     def val_generator():
         for i in range(0, length, batch_size)[:-1]:
             yield x[i:i+batch_size, :, :, :], y[i:i+batch_size, :, :, :]
 
-
+    #inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
+    #targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
     saver = tf.train.Saver()
     with tf.Session() as tf:
         if weights_name is None:
