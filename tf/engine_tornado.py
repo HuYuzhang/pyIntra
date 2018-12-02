@@ -288,13 +288,12 @@ def run_test():
     global batch_size
     block_size = 8
     model_module_name = sys.argv[2]
-    weights_name = None
     train_mode = sys.argv[3]
-    init_lr = float(sys.argv[4])
-    batch_size = int(sys.argv[5])
-    if len(sys.argv) == 7:
-        weights_name = sys.argv[6]
-    print(weights_name)
+    weights_name = sys.argv[4]
+    
+    inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
+    targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
+    exit(0)
 
     h5_path = '../../train/' + train_mode + '.h5'
     # load data
