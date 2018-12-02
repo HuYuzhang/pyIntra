@@ -311,7 +311,20 @@ def run_test():
     x = np.array(hf['data'], dtype=np.float32)[:1000]
     y = np.array(hf['label'], dtype=np.float32)[:1000]
     print("Finishing loading data")
+    satd_loss, mse_loss, pred = tf_build_model(model_module_name,
+                                       inputs,
+                                       targets,
+                                       test=True,
+                                       freq=True,
+                                       weights_name=weights_name
+                                       )
+    print('finish build network')
+    def val_generator():
+        for i in range(0, length, batch_size)[:-1]:
+            yield x[i:i+batch_size, :, :, :], y[i:i+batch_size, :, :, :]
     exit(0)
+
+
     length = x.shape[0]
     array_list = list(range(0, length))
     np.random.shuffle(array_list)
