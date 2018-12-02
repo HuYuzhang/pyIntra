@@ -7,6 +7,8 @@ import numpy as np
 import sys
 import os
 import subprocess as sp
+from skimage.measure import compare_ssim as ssim
+from skimage.measure import compare_psnr as psnr
 
 batch_size = 1024 
 epochs = 1000
@@ -18,6 +20,26 @@ def tf_build_model(module_name, weights_name, params, input_tensor, output_tenso
         train_op, satd_op, mse_op = model_module.build_model(
             input_tensor, output_tensor, params, freq=True)
         return train_op, satd_op, mse_op
+
+
+# gt and pred can be one sample or many sample
+def test_quality(gt, pred):
+    shape = gt.shape
+    if len(shape) == 3:
+        psnr_s = []
+        ssim_s = []
+        for i in range(shape[0]):
+            qr = psnr(gt[i,:,:].astype(np.uint8), pred[i,:,:].astype(np.uint8))
+            sm = ssim(gt[i,:,:].astype(np.uint8), pred[i,:,:].astype(np.uint8), multichannel = True)
+            psnr_s.append(qr)
+            ssim_s.append(sm)
+        # Here we will return the mean of the psnrs and ssims
+        return np.mean(psnr_s), np.mean(ssim_s)
+
+    else if len(shape) == 2:
+        qr = psnr(gt.astype(np.uint8), pred.astype(np.uint8))
+        sm = ssim(gt.astype(np.uint8), pred.astype(np.uint8), multichannel = True)
+        return qr, sm
 
 
 def drive():
@@ -197,12 +219,10 @@ def run_test():
     global batch_size
     block_size = 8
     model_module_name = sys.argv[2]
-    weights_name = None
-    train_mode = sys.argv[3]
-    init_lr = float(sys.argv[4])
+    weights_name = Nonesys.argv[3]
+    train_mode = sys.argv[4]
     batch_size = int(sys.argv[5])
-    if len(sys.argv) == 7:
-        weights_name = sys.argv[6]
+    
     print(weights_name)
 
     h5_path = '../../train/' + train_mode + '.h5'
@@ -230,9 +250,19 @@ def run_test():
         for i in range(0, length, batch_size)[:-1]:
             yield x[i:i+batch_size, :, :, :], y[i:i+batch_size, :, :, :]
 
-    for v_data, v_label in val_gen:
-        val_satd, val_mse = sess.run([satd_loss, mse_loss, pred], feed_dict={
-                                        inputs: v_data, targets: v_label})
+    psnr_s = []
+    ssim_s = []
+    with tf.Session() as sess:
+
+        for v_data, v_label in val_gen:
+            val_satd, val_mse, pred = sess.run([satd_loss, mse_loss, pred], feed_dict={
+                                            inputs: v_data, targets: v_label})
+            pred = pred.reshape([-1, 32, 32]) * 255.0
+            gt = v_label.reshape([-1, 32, 32]) * 255.0
+            val_psnr, val_ssim = test_quality(gt, pred)
+            psnr_s.append(val_psnr)
+            ssim_s.append(val_ssim)
+        print('PSNR: ', np.mean(psnr_s), 'SSIM: ', np.mean(ssim_s))
 
 if __name__ == '__main__':
     tasks = {'train': drive, 'test': run_test}

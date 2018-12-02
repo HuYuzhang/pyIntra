@@ -8,8 +8,15 @@ def test_quality(gt, pred):
     if len(shape) == 3:
         psnr_s = []
         ssim_s = []
-        for i in range()
+        for i in range(shape[0]):
+            qr = psnr(gt[i,:,:].astype(np.uint8), pred[i,:,:].astype(np.uint8))
+            sm = ssim(gt[i,:,:].astype(np.uint8), pred[i,:,:].astype(np.uint8), multichannel = True)
+            psnr_s.append(qr)
+            ssim_s.append(sm)
+        # Here we will return the mean of the psnrs and ssims
+        return np.mean(psnr_s), np.mean(ssim_s)
+
     else if len(shape) == 2:
         qr = psnr(gt.astype(np.uint8), pred.astype(np.uint8))
         sm = ssim(gt.astype(np.uint8), pred.astype(np.uint8), multichannel = True)
-        return {'psnr': qr, 'ssim': sm}
+        return qr, sm
