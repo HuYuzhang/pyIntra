@@ -229,6 +229,9 @@ def run_test():
     model_module_name = sys.argv[2]
     train_mode = sys.argv[3]
     weights_name = sys.argv[4]
+    
+    inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
+    targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
     print(weights_name)
 
     h5_path = '../../train/' + train_mode + '.h5'
@@ -244,8 +247,8 @@ def run_test():
     y = np.array(hf['label'], dtype=np.float32)[:1000]
 
     length = x.shape[0]
-    inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
-    targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
+    #inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
+    #targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
     satd_loss, mse_loss, pred = tf_build_model(model_module_name,
                                        inputs,
                                        targets,
@@ -288,4 +291,6 @@ def run_test():
 if __name__ == '__main__':
     tasks = {'train': drive, 'test': run_test}
     task = sys.argv[1]
+    a = tf.placeholder(tf.float32, [1,1])
+    print('begin task')
     tasks[task]()
