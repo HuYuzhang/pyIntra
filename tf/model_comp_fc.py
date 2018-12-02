@@ -72,7 +72,8 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
     if params is not None:
         batch_size = params['batch_size']
         lr = params['learning_rate']
-    
+    else:
+        batch_size = 64    
     input_layer = tf.reshape(input_tensor, [-1, 3072])
 
     _fc1 = tf.layers.dense(input_layer, 3072, name='fc1')

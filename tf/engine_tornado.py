@@ -287,10 +287,11 @@ def run_test():
     print(sys.argv)
     global batch_size
     block_size = 8
+    batch_size = 64
     model_module_name = sys.argv[2]
     train_mode = sys.argv[3]
     weights_name = sys.argv[4]
-    
+    print(weights_name, train_mode, model_module_name)
     inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
     targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
 
