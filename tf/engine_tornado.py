@@ -293,7 +293,6 @@ def run_test():
     
     inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
     targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
-    exit(0)
 
     h5_path = '../../train/' + train_mode + '.h5'
     # load data
@@ -309,9 +308,10 @@ def run_test():
     hf = h5py.File(h5_path)
         
     print("Loading data")
-    x = np.array(hf['data'], dtype=np.float32)
-    y = np.array(hf['label'], dtype=np.float32)
-
+    x = np.array(hf['data'], dtype=np.float32)[:1000]
+    y = np.array(hf['label'], dtype=np.float32)[:1000]
+    print("Finishing loading data")
+    exit(0)
     length = x.shape[0]
     array_list = list(range(0, length))
     np.random.shuffle(array_list)
