@@ -20,6 +20,7 @@ def tf_build_model(module_name, input_tensor, output_tensor, test=False, freq=Fa
         if test:
             satd_op, mse_op, pred = model_module.build_model(
                 input_tensor, output_tensor, params=None, freq=freq, test=test)
+            return satd_op, mse_op, pred
         else:
             train_op, satd_op, mse_op = model_module.build_model(
                 input_tensor, output_tensor, params=params, freq=freq, test=test)
@@ -312,6 +313,7 @@ def run_test():
     x = np.array(hf['data'], dtype=np.float32)[:1000]
     y = np.array(hf['label'], dtype=np.float32)[:1000]
     print("Finishing loading data")
+    print(weights_name)
     satd_loss, mse_loss, pred = tf_build_model(model_module_name,
                                        inputs,
                                        targets,
