@@ -38,7 +38,7 @@ def test_quality(gt, pred):
             psnr_s.append(qr)
             ssim_s.append(sm)
         # Here we will return the mean of the psnrs and ssims
-        return np.mean(psnr_s), np.mean(ssim_s)
+        return psnr_s, ssim_s
 
     elif len(shape) == 2:
         qr = psnr(gt.astype(np.uint8), pred.astype(np.uint8))
@@ -241,15 +241,16 @@ def run_test():
     hf = h5py.File(h5_path)
         
     print("Loading data")
-    x = np.array(hf['data'], dtype=np.float32)[:1000]
-    y = np.array(hf['label'], dtype=np.float32)[:1000]
+    x = np.array(hf['data'], dtype=np.float32)[:10000]
+    y = np.array(hf['label'], dtype=np.float32)[:10000]
+    length = x.shape[0]
     print("Finishing loading data")
     print(weights_name)
     satd_loss, mse_loss, pred = tf_build_model(model_module_name,
                                        inputs,
                                        targets,
                                        test=True,
-                                       freq=True,
+                                       freq=False,
                                        _weights_name=weights_name
                                        )
     print('finish build network')
@@ -277,9 +278,9 @@ def run_test():
             recon = recon.reshape([-1, 32, 32]) * 255.0
             gt = v_label.reshape([-1, 32, 32]) * 255.0
             val_psnr, val_ssim = test_quality(gt, recon)
-            print('-----------> tmp data, psnr: %f, ssim: %f<------------'%(val_psnr, val_ssim))
-            psnr_s.append(val_psnr)
-            ssim_s.append(val_ssim)
+            print('-----------> tmp data, psnr: %f, ssim: %f, mse loss: %f, satd_loss: %f<------------'%(np.mean(val_psnr), np.mean(val_ssim), np.mean(val_mse), np.mean(val_satd)))
+            psnr_s.extend(val_psnr)
+            ssim_s.extend(val_ssim)
         print('Finish testing, now psnr is: %f, and ssim is: %f'%(np.mean(psnr_s), np.mean(ssim_s)))
 
                                         
