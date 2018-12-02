@@ -39,3 +39,9 @@ Intra analyze with python
 | ------------- |:-------------:| -----:           |
 |971.519   | 794.746   | 1074.991 |
 * emmm看来方差还是比较大的，但是除了下界之外是否也需要设置一个上界呢？
+
+## 频域训练对比（12.2）
+![Image text](analyze/freq/dc.png)
+![Image text](analyze/freq/angle.png)
+![Image text](analyze/freq/planar.png)
+
