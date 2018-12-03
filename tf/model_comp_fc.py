@@ -154,7 +154,7 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
         learning_rate = tf.train.exponential_decay(params['learning_rate'], global_step=global_step, decay_steps = 10000, decay_rate=0.7)
         optimizer = tf.train.AdamOptimizer(learning_rate=params['learning_rate'])
         train_op = optimizer.minimize(loss=loss, global_step=tf.train.get_global_step())
-        return train_op, satd_loss, mse_loss
+        return train_op, satd_loss, mse_loss, recon
 
 
     else:
@@ -165,10 +165,10 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
         loss = satd_loss
         
         if test:
-            return satd_loss, mse_loss, fc4
+            return satd_loss, mse_loss, conv11
 
         global_step = tf.Variable(0, trainable=False)
         learning_rate = tf.train.exponential_decay(params['learning_rate'], global_step=global_step, decay_steps = 10000, decay_rate=0.7)
         optimizer = tf.train.AdamOptimizer(learning_rate=params['learning_rate'])
         train_op = optimizer.minimize(loss=loss, global_step=tf.train.get_global_step())
-        return train_op, satd_loss, mse_loss
+        return train_op, satd_loss, mse_loss, conv11

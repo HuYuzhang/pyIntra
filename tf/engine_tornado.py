@@ -22,9 +22,9 @@ def tf_build_model(module_name, input_tensor, output_tensor, test=False, freq=Fa
                 input_tensor, output_tensor, params=None, freq=freq, test=test)
             return satd_op, mse_op, pred
         else:
-            train_op, satd_op, mse_op = model_module.build_model(
+            train_op, satd_op, mse_op, pred = model_module.build_model(
                 input_tensor, output_tensor, params=params, freq=freq, test=test)
-            return train_op, satd_op, mse_op
+            return train_op, satd_op, mse_op, pred
 
 # gt and pred can be one sample or many sample
 def test_quality(gt, pred):
@@ -38,7 +38,7 @@ def test_quality(gt, pred):
             psnr_s.append(qr)
             ssim_s.append(sm)
         # Here we will return the mean of the psnrs and ssims
-        return psnr_s, ssim_s
+        return np.mean(psnr_s), np.mean(ssim_s)
 
     elif len(shape) == 2:
         qr = psnr(gt.astype(np.uint8), pred.astype(np.uint8))
@@ -110,7 +110,7 @@ def drive():
     
 
     # build model
-    train_op, satd_loss, mse_loss = tf_build_model(model_module_name,
+    train_op, satd_loss, mse_loss, pred = tf_build_model(model_module_name,
                                        inputs,
                                        targets,
                                        test=False,
@@ -136,8 +136,10 @@ def drive():
     with tf.Session() as sess:
         if weights_name is not None:
             saver.restore(sess, weights_name)
+            print('-----------Sucesfully restoring weights from: ', weights_name)
         else:
             sess.run(tf.global_variables_initializer())
+            print('-----------No weights defined, run initializer')
         total_var = 0
         for var in tf.trainable_variables():
             shape = var.get_shape()
@@ -178,27 +180,29 @@ def drive():
                 val_satd_s = []
                 val_mse_s = []
                 val_gen = val_generator()
+                psnr_s = []
+                ssim_s = []
                 for v_data, v_label in val_gen:
-                    val_satd, val_mse = sess.run([satd_loss, mse_loss], feed_dict={
+                    val_satd, val_mse, recon = sess.run([satd_loss, mse_loss, pred], feed_dict={
                                                  inputs: v_data, targets: v_label})
                     val_satd_s.append(float(val_satd))
                     val_mse_s.append(float(val_mse))
-                print(len(val_mse_s))
+                    tmp_psnr, tmp_ssim = test_quality(v_label.reshape([-1, 32, 32]) * 255.0, recon.reshape([-1, 32, 32]) * 255.0)
+                    psnr_s.append(tmp_psnr)
+                    ssim_s.append(tmp_ssim)
+                    print('#########tmp: ', tmp_psnr, tmp_ssim)
+
+                # Here is about the tensorboard
                 rs = sess.run(valid_merged, feed_dict={
                     valid_mse_input: val_mse_s, valid_satd_input: val_satd_s
                 })
                 valid_writer.add_summary(rs, i)
-                # ------------ Now try to write data to the test_writer
-                
-                # ------------ end writing --------------------
+                # Here is about the tensorboard
 
-                # # ----------------- for test-------------------
-                # for v_data, v_label in val_gen:
-                #     val_mse = sess.run(mse_loss, feed_dict={
-                #                                  inputs: v_data, targets: v_label})
-                #     # val_satd_s.append(float(val_satd))
-                #     val_mse_s.append(float(val_mse))
-                # #----------------------------------------------
+                # now test for psnr
+                print('------------->now show the info of PSNR and SSIM')
+                print('PSNR is: %f, SSIM is: %f'%(np.mean(psnr_s), np.mean(ssim_s)))
+
 
                 # print(val_satd_s)
                 print("Model name: %s, step %8d, Train SATD %.4f, Train MSE %.4f, Val SATD %.4f, Val MSE %.6f" % (
