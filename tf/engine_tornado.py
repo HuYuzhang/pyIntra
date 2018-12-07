@@ -9,6 +9,7 @@ import os
 import subprocess as sp
 from skimage.measure import compare_ssim as ssim
 from skimage.measure import compare_psnr as psnr
+from mylib import *
 
 batch_size = 1024 
 epochs = 1000
@@ -25,35 +26,6 @@ def tf_build_model(module_name, input_tensor, output_tensor, test=False, freq=Fa
             train_op, satd_op, mse_op, pred = model_module.build_model(
                 input_tensor, output_tensor, params=params, freq=freq, test=test)
             return train_op, satd_op, mse_op, pred
-
-# gt and pred can be one sample or many sample
-def test_quality(gt, pred):
-    shape = gt.shape
-    if len(shape) == 3:
-        psnr_s = []
-        ssim_s = []
-        for i in range(shape[0]):
-            qr = psnr(gt[i,:,:].astype(np.uint8), pred[i,:,:].astype(np.uint8))
-            sm = ssim(gt[i,:,:].astype(np.uint8), pred[i,:,:].astype(np.uint8), multichannel = True)
-            psnr_s.append(qr)
-            ssim_s.append(sm)
-        # Here we will return the mean of the psnrs and ssims
-        return np.mean(psnr_s), np.mean(ssim_s)
-
-    elif len(shape) == 2:
-        qr = psnr(gt.astype(np.uint8), pred.astype(np.uint8))
-        sm = ssim(gt.astype(np.uint8), pred.astype(np.uint8), multichannel = True)
-        return qr, sm
-
-def img2input(img):
-    img = img / 255.0
-    ret = np.zeros([3072])
-    gt = np.zeros([1024])
-    ret[:2048] = img[:32,:64].reshape([2048])
-    ret[2048:] = img[32:,:32].reshape([1024])
-    gt = img[32:,32:].reshape([1024])
-    return ret, gt
-
 
 def drive():
     print(sys.argv)
@@ -72,12 +44,6 @@ def drive():
     # load data
 
     hf = None
-    # if mode == 3:
-    #     hf = h5py.File('./General_dataset_%d_full.h5' % (num_scale))
-    #     print('./General_dataset_%d_full.h5' % (num_scale))
-    # else:
-    #     hf = h5py.File('./General_dataset_%d_partial.h5' % (num_scale))
-    #     print('./General_dataset_%d_partial.h5' % (num_scale))
     
     hf = h5py.File(h5_path)
         
@@ -289,12 +255,11 @@ def run_test():
         print('Finish testing, now psnr is: %f, and ssim is: %f'%(np.mean(psnr_s), np.mean(ssim_s)))
 
 
-def dump_img(filename):
+def dump_img(filename, targetpath):
     model_module_name = sys.argv[2]
-    train_mode = sys.argv[3]
-    weights_name = sys.argv[4]
-    filename = sys.argv[5]
-    print(weights_name, train_mode, model_module_name, filename)
+    weights_name = sys.argv[3]
+    filename = sys.argv[4]
+    print(weights_name, model_module_name, filename)
     
     img = skimage.imread(filename) / 255.0
     input, gt = img2input(filename)
@@ -322,7 +287,8 @@ def dump_img(filename):
         
         recon = sess.run(pred, feed_dict={inputs: input.reshape(1,3072,1,1), targets: gt.reshape(1,1024,1,1)})
         img[32:,32:] = recon.reshape([32,32]) * 255.0
-        skimage.imwrite('../../img/dump.png', img)
+        skimage.imwrite(targetpath, img)
+
     
     
 

@@ -78,19 +78,19 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
 
     _fc1 = tf.layers.dense(input_layer, 3072, name='fc1')
 
-    fc1 = tf.keras.layers.PReLU(shared_axes=[1], name='relu1')(_fc1)
+    fc1 = tf.nn.elu(_fc1, name='relu1')
 
     _fc2 = tf.layers.dense(fc1, 3072, name='fc2')
 
-    fc2 = tf.keras.layers.PReLU(shared_axes=[1], name='relu2')(_fc2)
+    fc2 = tf.nn.elu(_fc2, name='relu2')
 
     _fc3 = tf.layers.dense(fc2, 3072, name='fc3')
 
-    fc3 = tf.keras.layers.PReLU(shared_axes=[1], name='relu3')(_fc3)
+    fc3 = tf.nn.elu(_fc3, name='relu3')
 
     _fc4 = tf.layers.dense(fc3, 1024, name='fc4')
 
-    fc4 = tf.keras.layers.PReLU(shared_axes=[1], name='relu4')(_fc4)
+    fc4 = tf.nn.elu(_fc4, name='relu4')
     
 
     def SATD(y_true, y_pred):
@@ -144,7 +144,8 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
         recon = tf.reshape(tf.matmul(tf.matmul(batch_idct, freq_tensor, name='mul_dct1'), batch_dct, name='mul_idct1'), (-1, 1024, 1, 1), name='reshape_recon')
         mse_loss = tf.reduce_mean(tf.square((target_tensor-recon)))
         satd_loss = SATD(recon, target_tensor)
-        loss = satd_loss
+        # loss = satd_loss
+        loss = mse_loss
         # now we just end the function because we don't need the train_op
         if test:
             return satd_loss, mse_loss, recon
@@ -162,7 +163,8 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
         conv11 = tf.reshape(fc4, (-1,1024, 1, 1))
         mse_loss = tf.reduce_mean(tf.square((target_tensor-conv11)))
         satd_loss = SATD(conv11, target_tensor)
-        loss = satd_loss
+        # loss = satd_loss
+        loss = mse_loss
         
         if test:
             return satd_loss, mse_loss, conv11
