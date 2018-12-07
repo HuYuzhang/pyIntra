@@ -117,7 +117,7 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
 
             TH0 = tf.constant(H_target)
 
-            TH1 = tf.tile(TH0, (batch_size, 1, 1))
+            TH1 = tf.tile(TH0, (input_tensor.shape[0], 1, 1))
 
             diff = tf.reshape(y_true - y_pred, (-1, 32, 32))
 

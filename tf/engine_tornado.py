@@ -45,6 +45,15 @@ def test_quality(gt, pred):
         sm = ssim(gt.astype(np.uint8), pred.astype(np.uint8), multichannel = True)
         return qr, sm
 
+def img2input(img):
+    img = img / 255.0
+    ret = np.zeros([3072])
+    gt = np.zeros([1024])
+    ret[:2048] = img[:32,:64].reshape([2048])
+    ret[2048:] = img[32:,:32].reshape([1024])
+    gt = img[32:,32:].reshape([1024])
+    return ret, gt
+
 
 def drive():
     print(sys.argv)
@@ -80,16 +89,12 @@ def drive():
     array_list = list(range(0, length))
     np.random.shuffle(array_list)
     bar = int(length*0.95)
-    print('-------', bar, length)
+    print('-------print the length of bar: %d, and length %d' %(bar, length))
     train_data = x[array_list[:bar], :, :, :]
     val_data = x[array_list[bar:], :, :, :]
     train_label = y[array_list[:bar], :, :, :]
     val_label = y[array_list[bar:], :, :, :]
-    # train_data = train_data.transpose([0,2,3,1])
-    # val_data = val_data.transpose([0,2,3,1])
 
-    # train_label = train_label.transpose([0,2,3,1])
-    # val_label = val_label.transpose([0,2,3,1])
     print(bar)
 
     def train_generator():
@@ -102,12 +107,8 @@ def drive():
         for i in range(0, length-bar, batch_size)[:-1]:
             yield val_data[i:i+batch_size, :, :, :], val_label[i:i+batch_size, :, :, :]
 
-    # inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
-    # targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
     inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
     targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
-
-    
 
     # build model
     train_op, satd_loss, mse_loss, pred = tf_build_model(model_module_name,
@@ -147,7 +148,7 @@ def drive():
             for dim in shape:
                 par_num *= dim.value
             total_var += par_num
-        print("Number of total variables: %d" %(total_var))
+        print("----------------Number of total variables: %d" %(total_var))
         options = tf.RunOptions()  # trace_level=tf.RunOptions.FULL_TRACE)
         run_metadata = tf.RunMetadata()
         data_gen = train_generator()
@@ -187,10 +188,10 @@ def drive():
                                                  inputs: v_data, targets: v_label})
                     val_satd_s.append(float(val_satd))
                     val_mse_s.append(float(val_mse))
-                    tmp_psnr, tmp_ssim = test_quality(v_label.reshape([-1, 32, 32]) * 255.0, recon.reshape([-1, 32, 32]) * 255.0)
+                    tmp_psnr, tmp_ssim = test_quality(v_label.reshape([-1, 32, 32])[0] * 255.0, recon.reshape([-1, 32, 32])[0] * 255.0)
                     psnr_s.append(tmp_psnr)
                     ssim_s.append(tmp_ssim)
-                    print('#########tmp: ', tmp_psnr, tmp_ssim)
+                    # print('#########tmp: ', tmp_psnr, tmp_ssim)
 
                 # Here is about the tensorboard
                 rs = sess.run(valid_merged, feed_dict={
@@ -287,10 +288,47 @@ def run_test():
             ssim_s.extend(val_ssim)
         print('Finish testing, now psnr is: %f, and ssim is: %f'%(np.mean(psnr_s), np.mean(ssim_s)))
 
-                                        
+
+def dump_img(filename):
+    model_module_name = sys.argv[2]
+    train_mode = sys.argv[3]
+    weights_name = sys.argv[4]
+    filename = sys.argv[5]
+    print(weights_name, train_mode, model_module_name, filename)
+    
+    img = skimage.imread(filename) / 255.0
+    input, gt = img2input(filename)
+
+
+    inputs = tf.placeholder(tf.float32, [1, 3072, 1, 1])
+    targets = tf.placeholder(tf.float32, [1, 1024, 1, 1])
+    satd_loss, mse_loss, pred = tf_build_model(model_module_name,
+                                       inputs,
+                                       targets,
+                                       test=True,
+                                       freq=False,
+                                       _weights_name=weights_name
+                                       )
+
+    saver = tf.train.Saver()
+    
+    with tf.Session() as sess:
+        if weights_name is None:
+            print('error!, no weights_name')
+            exit(0)
+        else:
+            saver.restore(sess, weights_name)
+            print('Successfully restore weights from file: ', weights_name)
+        
+        recon = sess.run(pred, feed_dict={inputs: input.reshape(1,3072,1,1), targets: gt.reshape(1,1024,1,1)})
+        img[32:,32:] = recon.reshape([32,32]) * 255.0
+        skimage.imwrite('../../img/dump.png', img)
+    
+    
+
 
 if __name__ == '__main__':
-    tasks = {'train': drive, 'test': run_test}
+    tasks = {'train': drive, 'test': run_test, 'dump': dump_img}
     task = sys.argv[1]
-    print('begin task', task)
+    print('-------------begin task', task)
     tasks[task]()
