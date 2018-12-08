@@ -80,7 +80,7 @@ with open(dump_path) as f:
             dec_img = read_frame(dec_path, f_id, height, width)
             print(f_id)
         # Abort the most outsize row and column
-        if x == 0 or y == 0 or x == 992 or y == 1760
+        if x == 0 or y == 0 or x == 992 or y == 1760:
             continue
         # print([x, y])
         input  = dec_img[x-block_size:x+2*block_size,y-block_size:y+2*block_size] / 255.0
