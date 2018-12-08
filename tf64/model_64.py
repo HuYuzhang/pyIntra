@@ -75,11 +75,16 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
     else:
         batch_size = input_tensor.shape[0]
 
-    # we assume that input_tensor is of size (batch_size * 64 * 64)
-    # our target is to (batchsize_3072)
+    # we assume that input_tensor is of size (batch_size * 96 * 96)
+    # our target is to (batch_size * 32 * 32)
     # so first slice
-    tf.slice(input_tensor, [0,0,0],[batch_size,32,])
-    input_layer = tf.reshape(input_tensor, [-1, 3072])
+    inputs = []
+    inputs.append(tf.reshape(tf.slice(input_tensor, [0,0,0],[batch_size,32,96]), [-1,3072]))
+    inputs.append(tf.reshape(tf.slice(input_tensor, [0,32,0],[batch_size,96,32]), [-1,2048]))
+    input_layer = tf.concat(inputs, 1)
+    print('----------> Here is in the model building function, the input_layer size is(after slice and concat): ', input_layer.shape)
+    # now the input_payer is of size [batch_size, 5120]
+    # For the number of hidden state, we keep same with 3072 input
 
     _fc1 = tf.layers.dense(input_layer, 3072, name='fc1')
 
@@ -146,7 +151,8 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
         freq_tensor = tf.reshape(fc4, (-1, 32, 32))
         batch_dct = tf.tile(tf_dct, [tf.shape(input_tensor)[0],1,1],name='title_dct')
         batch_idct = tf.tile(tf_idct, [tf.shape(input_tensor)[0],1,1],name='title_idct')
-        recon = tf.reshape(tf.matmul(tf.matmul(batch_idct, freq_tensor, name='mul_dct1'), batch_dct, name='mul_idct1'), (-1, 1024, 1, 1), name='reshape_recon')
+        recon = tf.matmul(tf.matmul(batch_idct, freq_tensor, name='mul_dct1'), batch_dct, name='mul_idct1')
+        # Note that here recon is of size "batch_size * 32 * 32"
         mse_loss = tf.reduce_mean(tf.square((target_tensor-recon)))
         satd_loss = SATD(recon, target_tensor)
         # loss = satd_loss
@@ -165,7 +171,7 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
 
     else:
         # prediction in pixel domain
-        conv11 = tf.reshape(fc4, (-1,1024, 1, 1))
+        conv11 = tf.reshape(fc4, (-1, 32, 32))
         mse_loss = tf.reduce_mean(tf.square((target_tensor-conv11)))
         satd_loss = SATD(conv11, target_tensor)
         # loss = satd_loss

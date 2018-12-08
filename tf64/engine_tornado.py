@@ -40,7 +40,7 @@ def drive():
         weights_name = sys.argv[6]
     print(weights_name)
 
-    h5_path = '../../train/' + train_mode + '.h5'
+    h5_path = '../../train64/' + train_mode + '.h5'
     # load data
 
     hf = None
@@ -56,25 +56,25 @@ def drive():
     np.random.shuffle(array_list)
     bar = int(length*0.95)
     print('-------print the length of bar: %d, and length %d' %(bar, length))
-    train_data = x[array_list[:bar], :, :, :]
-    val_data = x[array_list[bar:], :, :, :]
-    train_label = y[array_list[:bar], :, :, :]
-    val_label = y[array_list[bar:], :, :, :]
+    train_data = x[array_list[:bar], :, :]
+    val_data = x[array_list[bar:], :, :]
+    train_label = y[array_list[:bar], :, :]
+    val_label = y[array_list[bar:], :, :]
 
     print(bar)
 
     def train_generator():
         while True:
             for i in range(0, bar, batch_size)[:-1]:
-                yield train_data[i:i+batch_size, :, :, :], train_label[i:i+batch_size, :, :, :]
+                yield train_data[i:i+batch_size, :, :], train_label[i:i+batch_size, :, :]
             # np.random.shuffle(train_data)
 
     def val_generator():
         for i in range(0, length-bar, batch_size)[:-1]:
-            yield val_data[i:i+batch_size, :, :, :], val_label[i:i+batch_size, :, :, :]
+            yield val_data[i:i+batch_size, :, :], val_label[i:i+batch_size, :, :]
 
-    inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
-    targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
+    inputs = tf.placeholder(tf.float32, [batch_size, 96, 96])
+    targets = tf.placeholder(tf.float32, [batch_size, 32, 32])
 
     # build model
     train_op, satd_loss, mse_loss, pred = tf_build_model(model_module_name,
@@ -89,15 +89,15 @@ def drive():
                                        _weights_name=weights_name
                                        )
     
-    tensorboard_train_dir = '../../tensorboard/' + train_mode + '/train'
-    tensorboard_valid_dir = '../../tensorboard/' + train_mode + '/valid'
+    tensorboard_train_dir = '../../tensorboard64/' + train_mode + '/train'
+    tensorboard_valid_dir = '../../tensorboard64/' + train_mode + '/valid'
     if not os.path.exists(tensorboard_train_dir):
         os.makedirs(tensorboard_train_dir)
     if not os.path.exists(tensorboard_valid_dir):
         os.makedirs(tensorboard_valid_dir)
 
     saver = tf.train.Saver(max_to_keep=30)
-    checkpoint_dir = '../../model/' + train_mode + '/'
+    checkpoint_dir = '../../model64/' + train_mode + '/'
     if not os.path.exists(checkpoint_dir):
         os.makedirs(checkpoint_dir)
     with tf.Session() as sess:
@@ -202,8 +202,8 @@ def run_test():
     train_mode = sys.argv[3]
     weights_name = sys.argv[4]
     print(weights_name, train_mode, model_module_name)
-    inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
-    targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
+    inputs = tf.placeholder(tf.float32, [batch_size, 96, 96])
+    targets = tf.placeholder(tf.float32, [batch_size, 32, 32])
 
     h5_path = '../../train/' + train_mode + '.h5'
 
@@ -227,7 +227,7 @@ def run_test():
     print('finish build network')
     def val_generator():
         for i in range(0, length, batch_size)[:-1]:
-            yield x[i:i+batch_size, :, :, :], y[i:i+batch_size, :, :, :]
+            yield x[i:i+batch_size, :, :], y[i:i+batch_size, :, :]
 
     saver = tf.train.Saver()
     
@@ -256,38 +256,39 @@ def run_test():
 
 
 def dump_img(filename, targetpath):
-    model_module_name = sys.argv[2]
-    weights_name = sys.argv[3]
-    filename = sys.argv[4]
-    print(weights_name, model_module_name, filename)
+    pass
+    # model_module_name = sys.argv[2]
+    # weights_name = sys.argv[3]
+    # filename = sys.argv[4]
+    # print(weights_name, model_module_name, filename)
     
-    img = skimage.imread(filename) / 255.0
-    input, gt = img2input(filename)
+    # img = skimage.imread(filename) / 255.0
+    # input, gt = img2input(filename)
 
 
-    inputs = tf.placeholder(tf.float32, [1, 3072, 1, 1])
-    targets = tf.placeholder(tf.float32, [1, 1024, 1, 1])
-    satd_loss, mse_loss, pred = tf_build_model(model_module_name,
-                                       inputs,
-                                       targets,
-                                       test=True,
-                                       freq=False,
-                                       _weights_name=weights_name
-                                       )
+    # inputs = tf.placeholder(tf.float32, [1, 3072, 1, 1])
+    # targets = tf.placeholder(tf.float32, [1, 1024, 1, 1])
+    # satd_loss, mse_loss, pred = tf_build_model(model_module_name,
+    #                                    inputs,
+    #                                    targets,
+    #                                    test=True,
+    #                                    freq=False,
+    #                                    _weights_name=weights_name
+    #                                    )
 
-    saver = tf.train.Saver()
+    # saver = tf.train.Saver()
     
-    with tf.Session() as sess:
-        if weights_name is None:
-            print('error!, no weights_name')
-            exit(0)
-        else:
-            saver.restore(sess, weights_name)
-            print('Successfully restore weights from file: ', weights_name)
+    # with tf.Session() as sess:
+    #     if weights_name is None:
+    #         print('error!, no weights_name')
+    #         exit(0)
+    #     else:
+    #         saver.restore(sess, weights_name)
+    #         print('Successfully restore weights from file: ', weights_name)
         
-        recon = sess.run(pred, feed_dict={inputs: input.reshape(1,3072,1,1), targets: gt.reshape(1,1024,1,1)})
-        img[32:,32:] = recon.reshape([32,32]) * 255.0
-        skimage.imwrite(targetpath, img)
+    #     recon = sess.run(pred, feed_dict={inputs: input.reshape(1,3072,1,1), targets: gt.reshape(1,1024,1,1)})
+    #     img[32:,32:] = recon.reshape([32,32]) * 255.0
+    #     skimage.imwrite(targetpath, img)
 
     
     
