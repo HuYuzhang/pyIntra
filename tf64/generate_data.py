@@ -3,7 +3,7 @@ import cv2 as cv
 from mylib import h5Handler
 from mylib import read_frame
 
-dump_path = 'dump_dir.txt'
+dump_path = '../preProcess/dump_dir.txt'
 dec_path = '../../raw_data/dec.yuv'
 gt_path = '../../raw_data/video.yuv'
 target_path = '../img/'

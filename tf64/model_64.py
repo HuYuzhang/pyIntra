@@ -80,8 +80,9 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
     # so first slice
     inputs = []
     inputs.append(tf.reshape(tf.slice(input_tensor, [0,0,0],[batch_size,32,96]), [-1,3072]))
-    inputs.append(tf.reshape(tf.slice(input_tensor, [0,32,0],[batch_size,96,32]), [-1,2048]))
+    inputs.append(tf.reshape(tf.slice(input_tensor, [0,32,0],[batch_size,64,32]), [-1,2048]))
     input_layer = tf.concat(inputs, 1)
+    print('---------->For debug, ', inputs[0].shape, inputs[1].shape) 
     print('----------> Here is in the model building function, the input_layer size is(after slice and concat): ', input_layer.shape)
     # now the input_payer is of size [batch_size, 5120]
     # For the number of hidden state, we keep same with 3072 input
