@@ -195,25 +195,27 @@ def drive():
 
 def run_test():
     print(sys.argv)
+    if len(sys.argv) < 6
+        print('Usage: python engine_tornado.py test model_module_name train_mode weights_name batch_size')
     global batch_size
     block_size = 8
-    batch_size = 64
     model_module_name = sys.argv[2]
     train_mode = sys.argv[3]
     weights_name = sys.argv[4]
+    batch_size = sys.argv[5]
     print(weights_name, train_mode, model_module_name)
     inputs = tf.placeholder(tf.float32, [batch_size, 96, 96])
     targets = tf.placeholder(tf.float32, [batch_size, 32, 32])
 
-    h5_path = '../../train/' + train_mode + '.h5'
+    h5_path = '../../train64/' + train_mode + '.h5'
 
     hf = None
     
     hf = h5py.File(h5_path)
         
     print("Loading data")
-    x = np.array(hf['data'], dtype=np.float32)[:10000]
-    y = np.array(hf['label'], dtype=np.float32)[:10000]
+    x = np.array(hf['data'], dtype=np.float32)
+    y = np.array(hf['label'], dtype=np.float32)
     length = x.shape[0]
     print("Finishing loading data")
     print(weights_name)
@@ -221,7 +223,7 @@ def run_test():
                                        inputs,
                                        targets,
                                        test=True,
-                                       freq=False,
+                                       freq=True,
                                        _weights_name=weights_name
                                        )
     print('finish build network')
@@ -242,16 +244,17 @@ def run_test():
         psnr_s = []
         ssim_s = []
         val_gen = val_generator()
+        valid_cnt = 0
         for v_data, v_label in val_gen:
             val_satd, val_mse, recon = sess.run([satd_loss, mse_loss, pred], feed_dict={
                                             inputs: v_data, targets: v_label})
-
+            val_cnt = val_cnt + batch_size            
             recon = recon.reshape([-1, 32, 32]) * 255.0
             gt = v_label.reshape([-1, 32, 32]) * 255.0
             val_psnr, val_ssim = test_quality(gt, recon)
-            print('-----------> tmp data, psnr: %f, ssim: %f, mse loss: %f, satd_loss: %f<------------'%(np.mean(val_psnr), np.mean(val_ssim), np.mean(val_mse), np.mean(val_satd)))
-            psnr_s.extend(val_psnr)
-            ssim_s.extend(val_ssim)
+            print('-----------> tmp data, now %d sample tested, %d in total, psnr: %f, ssim: %f, mse loss: %f, satd_loss: %f<------------'%(val_cnt, length, val_psnr, val_ssim, np.mean(val_mse), np.mean(val_satd)))
+            psnr_s.append(val_psnr)
+            ssim_s.append(val_ssim)
         print('Finish testing, now psnr is: %f, and ssim is: %f'%(np.mean(psnr_s), np.mean(ssim_s)))
 
 
