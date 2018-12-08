@@ -195,14 +195,15 @@ def drive():
 
 def run_test():
     print(sys.argv)
-    if len(sys.argv) < 6
+    if len(sys.argv) < 6:
         print('Usage: python engine_tornado.py test model_module_name train_mode weights_name batch_size')
+        exit(0)
     global batch_size
     block_size = 8
     model_module_name = sys.argv[2]
     train_mode = sys.argv[3]
     weights_name = sys.argv[4]
-    batch_size = sys.argv[5]
+    batch_size = int(sys.argv[5])
     print(weights_name, train_mode, model_module_name)
     inputs = tf.placeholder(tf.float32, [batch_size, 96, 96])
     targets = tf.placeholder(tf.float32, [batch_size, 32, 32])
@@ -244,7 +245,7 @@ def run_test():
         psnr_s = []
         ssim_s = []
         val_gen = val_generator()
-        valid_cnt = 0
+        val_cnt = 0
         for v_data, v_label in val_gen:
             val_satd, val_mse, recon = sess.run([satd_loss, mse_loss, pred], feed_dict={
                                             inputs: v_data, targets: v_label})
