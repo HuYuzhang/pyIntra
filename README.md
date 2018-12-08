@@ -45,3 +45,11 @@ Intra analyze with python
 ![Image text](analyze/freq/angle.png)
 ![Image text](analyze/freq/planar.png)
 
+
+## 5PU下的预测结果统计
+### 频域预测
+|Type           | dc            | planar      | angle        |
+| ------------- | ------------- |-------------| -----------  |
+|PSNR           |26.446408      | 24.559245   | 24.974869    |
+|SSIM           |0.607805       | 0.564917    | 0.617820     |
+
