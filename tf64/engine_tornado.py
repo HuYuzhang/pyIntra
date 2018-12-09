@@ -217,6 +217,8 @@ def run_test():
     print("Loading data")
     x = np.array(hf['data'], dtype=np.float32)
     y = np.array(hf['label'], dtype=np.float32)
+    #x = np.zeros([1000,96,96])
+    #y = np.zeros([1000,32,32])
     length = x.shape[0]
     print("Finishing loading data")
     print(weights_name)
@@ -242,8 +244,8 @@ def run_test():
             saver.restore(sess, weights_name)
             print('Successfully restore weights from file: ', weights_name)
         # Fore debug
-        import IPython
-        IPython.embed()
+        #import IPython
+        #IPython.embed()
         # For debug
         psnr_s = []
         ssim_s = []

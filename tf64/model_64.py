@@ -161,7 +161,7 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
         # loss = satd_loss
         loss = mse_loss
         # now we just end the function because we don't need the train_op
-        recon = tf.reshape(recon, (-1, 32, 32, 1), name='4_dim_out_freq'))
+        recon = tf.reshape(recon, (-1, 32, 32, 1), name='4_dim_out_freq')
         if test:
             return satd_loss, mse_loss, recon
         

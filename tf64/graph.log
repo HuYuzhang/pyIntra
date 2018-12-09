@@ -51,6 +51,90 @@ node {
   }
 }
 node {
+  name: "main_full/Reshape/shape"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "\377\377\377\377`\000\000\000`\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Reshape"
+  op: "Reshape"
+  input: "Placeholder"
+  input: "main_full/Reshape/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tshape"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/Reshape_1/shape"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "\377\377\377\377 \000\000\000 \000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Reshape_1"
+  op: "Reshape"
+  input: "Placeholder_1"
+  input: "main_full/Reshape_1/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tshape"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
   name: "main_full/Slice/begin"
   op: "Const"
   attr {
@@ -101,7 +185,7 @@ node {
 node {
   name: "main_full/Slice"
   op: "Slice"
-  input: "Placeholder"
+  input: "main_full/Reshape"
   input: "main_full/Slice/begin"
   input: "main_full/Slice/size"
   attr {
@@ -118,7 +202,7 @@ node {
   }
 }
 node {
-  name: "main_full/Reshape/shape"
+  name: "main_full/Reshape_2/shape"
   op: "Const"
   attr {
     key: "dtype"
@@ -142,10 +226,10 @@ node {
   }
 }
 node {
-  name: "main_full/Reshape"
+  name: "main_full/Reshape_2"
   op: "Reshape"
   input: "main_full/Slice"
-  input: "main_full/Reshape/shape"
+  input: "main_full/Reshape_2/shape"
   attr {
     key: "T"
     value {
@@ -210,7 +294,7 @@ node {
 node {
   name: "main_full/Slice_1"
   op: "Slice"
-  input: "Placeholder"
+  input: "main_full/Reshape"
   input: "main_full/Slice_1/begin"
   input: "main_full/Slice_1/size"
   attr {
@@ -227,7 +311,7 @@ node {
   }
 }
 node {
-  name: "main_full/Reshape_1/shape"
+  name: "main_full/Reshape_3/shape"
   op: "Const"
   attr {
     key: "dtype"
@@ -251,10 +335,10 @@ node {
   }
 }
 node {
-  name: "main_full/Reshape_1"
+  name: "main_full/Reshape_3"
   op: "Reshape"
   input: "main_full/Slice_1"
-  input: "main_full/Reshape_1/shape"
+  input: "main_full/Reshape_3/shape"
   attr {
     key: "T"
     value {
@@ -292,8 +376,8 @@ node {
 node {
   name: "main_full/concat"
   op: "ConcatV2"
-  input: "main_full/Reshape"
-  input: "main_full/Reshape_1"
+  input: "main_full/Reshape_2"
+  input: "main_full/Reshape_3"
   input: "main_full/concat/axis"
   attr {
     key: "N"
@@ -2423,7 +2507,7 @@ node {
   }
 }
 node {
-  name: "main_full/Reshape_2/shape"
+  name: "main_full/3_dim_raw_output_freq/shape"
   op: "Const"
   attr {
     key: "dtype"
@@ -2447,10 +2531,10 @@ node {
   }
 }
 node {
-  name: "main_full/Reshape_2"
+  name: "main_full/3_dim_raw_output_freq"
   op: "Reshape"
   input: "main_full/relu4"
-  input: "main_full/Reshape_2/shape"
+  input: "main_full/3_dim_raw_output_freq/shape"
   attr {
     key: "T"
     value {
@@ -2930,7 +3014,7 @@ node {
   name: "main_full/mul_dct1"
   op: "BatchMatMul"
   input: "main_full/title_idct"
-  input: "main_full/Reshape_2"
+  input: "main_full/3_dim_raw_output_freq"
   attr {
     key: "T"
     value {
@@ -2977,7 +3061,7 @@ node {
 node {
   name: "main_full/sub"
   op: "Sub"
-  input: "Placeholder_1"
+  input: "main_full/Reshape_1"
   input: "main_full/mul_idct1"
   attr {
     key: "T"
@@ -3121,7 +3205,7 @@ node {
   name: "main_full/sub_1"
   op: "Sub"
   input: "main_full/mul_idct1"
-  input: "Placeholder_1"
+  input: "main_full/Reshape_1"
   attr {
     key: "T"
     value {
@@ -3130,7 +3214,7 @@ node {
   }
 }
 node {
-  name: "main_full/Reshape_3/shape"
+  name: "main_full/Reshape_4/shape"
   op: "Const"
   attr {
     key: "dtype"
@@ -3154,10 +3238,10 @@ node {
   }
 }
 node {
-  name: "main_full/Reshape_3"
+  name: "main_full/Reshape_4"
   op: "Reshape"
   input: "main_full/sub_1"
-  input: "main_full/Reshape_3/shape"
+  input: "main_full/Reshape_4/shape"
   attr {
     key: "T"
     value {
@@ -3175,7 +3259,7 @@ node {
   name: "main_full/MatMul"
   op: "BatchMatMul"
   input: "main_full/Tile"
-  input: "main_full/Reshape_3"
+  input: "main_full/Reshape_4"
   attr {
     key: "T"
     value {
@@ -3319,6 +3403,48 @@ node {
     key: "keep_dims"
     value {
       b: false
+    }
+  }
+}
+node {
+  name: "main_full/4_dim_out_freq/shape"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 4
+          }
+        }
+        tensor_content: "\377\377\377\377 \000\000\000 \000\000\000\001\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/4_dim_out_freq"
+  op: "Reshape"
+  input: "main_full/mul_idct1"
+  input: "main_full/4_dim_out_freq/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tshape"
+    value {
+      type: DT_INT32
     }
   }
 }
