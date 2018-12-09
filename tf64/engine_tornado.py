@@ -241,7 +241,10 @@ def run_test():
         else:
             saver.restore(sess, weights_name)
             print('Successfully restore weights from file: ', weights_name)
-            
+        # Fore debug
+        import IPython
+        IPython.embed()
+        # For debug
         psnr_s = []
         ssim_s = []
         val_gen = val_generator()

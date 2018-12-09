@@ -53,7 +53,6 @@ def drive():
                                            'num_scale':num_scale},
                                        inputs,
                                        targets,mode)
-    
     tensorboard_dir = 'tensorboard'
     if not os.path.exists(tensorboard_dir):
         os.makedirs(tensorboard_dir)
@@ -63,9 +62,9 @@ def drive():
     checkpoint_dir = './ckpt/'
     with tf.Session() as sess:
         saver.restore(sess, weights_name)
-        import IPython
-        IPython.embed()
-        graph = convert_variables_to_constants(sess, sess.graph_def, ['main_full/conv11/BiasAdd'])
+        # import IPython
+        # IPython.embed()
+        graph = convert_variables_to_constants(sess, sess.graph_def, ['main_full/mul_idct1'])
         #graph = convert_variables_to_constants(sess, sess.graph_def, ['main_full/Reshape_1'])
         tf.train.write_graph(graph,'.','graph_m%d_s%d_%s.pb' % (mode, num_scale, model_id),as_text=False)
 

@@ -1,0 +1,3815 @@
+node {
+  name: "Placeholder"
+  op: "Placeholder"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 64
+        }
+        dim {
+          size: 96
+        }
+        dim {
+          size: 96
+        }
+      }
+    }
+  }
+}
+node {
+  name: "Placeholder_1"
+  op: "Placeholder"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 64
+        }
+        dim {
+          size: 32
+        }
+        dim {
+          size: 32
+        }
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Slice/begin"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "\000\000\000\000\000\000\000\000\000\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Slice/size"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "@\000\000\000 \000\000\000`\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Slice"
+  op: "Slice"
+  input: "Placeholder"
+  input: "main_full/Slice/begin"
+  input: "main_full/Slice/size"
+  attr {
+    key: "Index"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "main_full/Reshape/shape"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 2
+          }
+        }
+        tensor_content: "\377\377\377\377\000\014\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Reshape"
+  op: "Reshape"
+  input: "main_full/Slice"
+  input: "main_full/Reshape/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tshape"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/Slice_1/begin"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "\000\000\000\000 \000\000\000\000\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Slice_1/size"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "@\000\000\000@\000\000\000 \000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Slice_1"
+  op: "Slice"
+  input: "Placeholder"
+  input: "main_full/Slice_1/begin"
+  input: "main_full/Slice_1/size"
+  attr {
+    key: "Index"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "main_full/Reshape_1/shape"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 2
+          }
+        }
+        tensor_content: "\377\377\377\377\000\010\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Reshape_1"
+  op: "Reshape"
+  input: "main_full/Slice_1"
+  input: "main_full/Reshape_1/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tshape"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/concat/axis"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "main_full/concat"
+  op: "ConcatV2"
+  input: "main_full/Reshape"
+  input: "main_full/Reshape_1"
+  input: "main_full/concat/axis"
+  attr {
+    key: "N"
+    value {
+      i: 2
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/fc1/kernel/Initializer/random_uniform/shape"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 2
+          }
+        }
+        tensor_content: "\000\024\000\000\000\014\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc1/kernel/Initializer/random_uniform/min"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: -0.027063293382525444
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc1/kernel/Initializer/random_uniform/max"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.027063293382525444
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc1/kernel/Initializer/random_uniform/RandomUniform"
+  op: "RandomUniform"
+  input: "main_full/fc1/kernel/Initializer/random_uniform/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "seed"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "seed2"
+    value {
+      i: 0
+    }
+  }
+}
+node {
+  name: "main_full/fc1/kernel/Initializer/random_uniform/sub"
+  op: "Sub"
+  input: "main_full/fc1/kernel/Initializer/random_uniform/max"
+  input: "main_full/fc1/kernel/Initializer/random_uniform/min"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc1/kernel/Initializer/random_uniform/mul"
+  op: "Mul"
+  input: "main_full/fc1/kernel/Initializer/random_uniform/RandomUniform"
+  input: "main_full/fc1/kernel/Initializer/random_uniform/sub"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc1/kernel/Initializer/random_uniform"
+  op: "Add"
+  input: "main_full/fc1/kernel/Initializer/random_uniform/mul"
+  input: "main_full/fc1/kernel/Initializer/random_uniform/min"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc1/kernel"
+  op: "VariableV2"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/kernel"
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 5120
+        }
+        dim {
+          size: 3072
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "main_full/fc1/kernel/Assign"
+  op: "Assign"
+  input: "main_full/fc1/kernel"
+  input: "main_full/fc1/kernel/Initializer/random_uniform"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/kernel"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "main_full/fc1/kernel/read"
+  op: "Identity"
+  input: "main_full/fc1/kernel"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc1/bias/Initializer/zeros/shape_as_tensor"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/bias"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 3072
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc1/bias/Initializer/zeros/Const"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/bias"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.0
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc1/bias/Initializer/zeros"
+  op: "Fill"
+  input: "main_full/fc1/bias/Initializer/zeros/shape_as_tensor"
+  input: "main_full/fc1/bias/Initializer/zeros/Const"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/bias"
+      }
+    }
+  }
+  attr {
+    key: "index_type"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/fc1/bias"
+  op: "VariableV2"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/bias"
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 3072
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "main_full/fc1/bias/Assign"
+  op: "Assign"
+  input: "main_full/fc1/bias"
+  input: "main_full/fc1/bias/Initializer/zeros"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/bias"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "main_full/fc1/bias/read"
+  op: "Identity"
+  input: "main_full/fc1/bias"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/bias"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc1/MatMul"
+  op: "MatMul"
+  input: "main_full/concat"
+  input: "main_full/fc1/kernel/read"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "transpose_a"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "transpose_b"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "main_full/fc1/BiasAdd"
+  op: "BiasAdd"
+  input: "main_full/fc1/MatMul"
+  input: "main_full/fc1/bias/read"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "data_format"
+    value {
+      s: "NHWC"
+    }
+  }
+}
+node {
+  name: "main_full/relu1"
+  op: "Elu"
+  input: "main_full/fc1/BiasAdd"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "main_full/fc2/kernel/Initializer/random_uniform/shape"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 2
+          }
+        }
+        tensor_content: "\000\014\000\000\000\014\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc2/kernel/Initializer/random_uniform/min"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: -0.03125
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc2/kernel/Initializer/random_uniform/max"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.03125
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc2/kernel/Initializer/random_uniform/RandomUniform"
+  op: "RandomUniform"
+  input: "main_full/fc2/kernel/Initializer/random_uniform/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "seed"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "seed2"
+    value {
+      i: 0
+    }
+  }
+}
+node {
+  name: "main_full/fc2/kernel/Initializer/random_uniform/sub"
+  op: "Sub"
+  input: "main_full/fc2/kernel/Initializer/random_uniform/max"
+  input: "main_full/fc2/kernel/Initializer/random_uniform/min"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc2/kernel/Initializer/random_uniform/mul"
+  op: "Mul"
+  input: "main_full/fc2/kernel/Initializer/random_uniform/RandomUniform"
+  input: "main_full/fc2/kernel/Initializer/random_uniform/sub"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc2/kernel/Initializer/random_uniform"
+  op: "Add"
+  input: "main_full/fc2/kernel/Initializer/random_uniform/mul"
+  input: "main_full/fc2/kernel/Initializer/random_uniform/min"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc2/kernel"
+  op: "VariableV2"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/kernel"
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 3072
+        }
+        dim {
+          size: 3072
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "main_full/fc2/kernel/Assign"
+  op: "Assign"
+  input: "main_full/fc2/kernel"
+  input: "main_full/fc2/kernel/Initializer/random_uniform"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/kernel"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "main_full/fc2/kernel/read"
+  op: "Identity"
+  input: "main_full/fc2/kernel"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc2/bias/Initializer/zeros/shape_as_tensor"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/bias"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 3072
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc2/bias/Initializer/zeros/Const"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/bias"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.0
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc2/bias/Initializer/zeros"
+  op: "Fill"
+  input: "main_full/fc2/bias/Initializer/zeros/shape_as_tensor"
+  input: "main_full/fc2/bias/Initializer/zeros/Const"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/bias"
+      }
+    }
+  }
+  attr {
+    key: "index_type"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/fc2/bias"
+  op: "VariableV2"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/bias"
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 3072
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "main_full/fc2/bias/Assign"
+  op: "Assign"
+  input: "main_full/fc2/bias"
+  input: "main_full/fc2/bias/Initializer/zeros"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/bias"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "main_full/fc2/bias/read"
+  op: "Identity"
+  input: "main_full/fc2/bias"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/bias"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc2/MatMul"
+  op: "MatMul"
+  input: "main_full/relu1"
+  input: "main_full/fc2/kernel/read"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "transpose_a"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "transpose_b"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "main_full/fc2/BiasAdd"
+  op: "BiasAdd"
+  input: "main_full/fc2/MatMul"
+  input: "main_full/fc2/bias/read"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "data_format"
+    value {
+      s: "NHWC"
+    }
+  }
+}
+node {
+  name: "main_full/relu2"
+  op: "Elu"
+  input: "main_full/fc2/BiasAdd"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "main_full/fc3/kernel/Initializer/random_uniform/shape"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 2
+          }
+        }
+        tensor_content: "\000\014\000\000\000\014\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc3/kernel/Initializer/random_uniform/min"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: -0.03125
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc3/kernel/Initializer/random_uniform/max"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.03125
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc3/kernel/Initializer/random_uniform/RandomUniform"
+  op: "RandomUniform"
+  input: "main_full/fc3/kernel/Initializer/random_uniform/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "seed"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "seed2"
+    value {
+      i: 0
+    }
+  }
+}
+node {
+  name: "main_full/fc3/kernel/Initializer/random_uniform/sub"
+  op: "Sub"
+  input: "main_full/fc3/kernel/Initializer/random_uniform/max"
+  input: "main_full/fc3/kernel/Initializer/random_uniform/min"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc3/kernel/Initializer/random_uniform/mul"
+  op: "Mul"
+  input: "main_full/fc3/kernel/Initializer/random_uniform/RandomUniform"
+  input: "main_full/fc3/kernel/Initializer/random_uniform/sub"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc3/kernel/Initializer/random_uniform"
+  op: "Add"
+  input: "main_full/fc3/kernel/Initializer/random_uniform/mul"
+  input: "main_full/fc3/kernel/Initializer/random_uniform/min"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc3/kernel"
+  op: "VariableV2"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/kernel"
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 3072
+        }
+        dim {
+          size: 3072
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "main_full/fc3/kernel/Assign"
+  op: "Assign"
+  input: "main_full/fc3/kernel"
+  input: "main_full/fc3/kernel/Initializer/random_uniform"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/kernel"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "main_full/fc3/kernel/read"
+  op: "Identity"
+  input: "main_full/fc3/kernel"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc3/bias/Initializer/zeros/shape_as_tensor"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/bias"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 3072
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc3/bias/Initializer/zeros/Const"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/bias"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.0
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc3/bias/Initializer/zeros"
+  op: "Fill"
+  input: "main_full/fc3/bias/Initializer/zeros/shape_as_tensor"
+  input: "main_full/fc3/bias/Initializer/zeros/Const"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/bias"
+      }
+    }
+  }
+  attr {
+    key: "index_type"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/fc3/bias"
+  op: "VariableV2"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/bias"
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 3072
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "main_full/fc3/bias/Assign"
+  op: "Assign"
+  input: "main_full/fc3/bias"
+  input: "main_full/fc3/bias/Initializer/zeros"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/bias"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "main_full/fc3/bias/read"
+  op: "Identity"
+  input: "main_full/fc3/bias"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/bias"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc3/MatMul"
+  op: "MatMul"
+  input: "main_full/relu2"
+  input: "main_full/fc3/kernel/read"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "transpose_a"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "transpose_b"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "main_full/fc3/BiasAdd"
+  op: "BiasAdd"
+  input: "main_full/fc3/MatMul"
+  input: "main_full/fc3/bias/read"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "data_format"
+    value {
+      s: "NHWC"
+    }
+  }
+}
+node {
+  name: "main_full/relu3"
+  op: "Elu"
+  input: "main_full/fc3/BiasAdd"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "main_full/fc4/kernel/Initializer/random_uniform/shape"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 2
+          }
+        }
+        tensor_content: "\000\014\000\000\000\004\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc4/kernel/Initializer/random_uniform/min"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: -0.03827327862381935
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc4/kernel/Initializer/random_uniform/max"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.03827327862381935
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc4/kernel/Initializer/random_uniform/RandomUniform"
+  op: "RandomUniform"
+  input: "main_full/fc4/kernel/Initializer/random_uniform/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "seed"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "seed2"
+    value {
+      i: 0
+    }
+  }
+}
+node {
+  name: "main_full/fc4/kernel/Initializer/random_uniform/sub"
+  op: "Sub"
+  input: "main_full/fc4/kernel/Initializer/random_uniform/max"
+  input: "main_full/fc4/kernel/Initializer/random_uniform/min"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc4/kernel/Initializer/random_uniform/mul"
+  op: "Mul"
+  input: "main_full/fc4/kernel/Initializer/random_uniform/RandomUniform"
+  input: "main_full/fc4/kernel/Initializer/random_uniform/sub"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc4/kernel/Initializer/random_uniform"
+  op: "Add"
+  input: "main_full/fc4/kernel/Initializer/random_uniform/mul"
+  input: "main_full/fc4/kernel/Initializer/random_uniform/min"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc4/kernel"
+  op: "VariableV2"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/kernel"
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 3072
+        }
+        dim {
+          size: 1024
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "main_full/fc4/kernel/Assign"
+  op: "Assign"
+  input: "main_full/fc4/kernel"
+  input: "main_full/fc4/kernel/Initializer/random_uniform"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/kernel"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "main_full/fc4/kernel/read"
+  op: "Identity"
+  input: "main_full/fc4/kernel"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc4/bias/Initializer/zeros/shape_as_tensor"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/bias"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1024
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc4/bias/Initializer/zeros/Const"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/bias"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.0
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc4/bias/Initializer/zeros"
+  op: "Fill"
+  input: "main_full/fc4/bias/Initializer/zeros/shape_as_tensor"
+  input: "main_full/fc4/bias/Initializer/zeros/Const"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/bias"
+      }
+    }
+  }
+  attr {
+    key: "index_type"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/fc4/bias"
+  op: "VariableV2"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/bias"
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 1024
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "main_full/fc4/bias/Assign"
+  op: "Assign"
+  input: "main_full/fc4/bias"
+  input: "main_full/fc4/bias/Initializer/zeros"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/bias"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "main_full/fc4/bias/read"
+  op: "Identity"
+  input: "main_full/fc4/bias"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/bias"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/fc4/MatMul"
+  op: "MatMul"
+  input: "main_full/relu3"
+  input: "main_full/fc4/kernel/read"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "transpose_a"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "transpose_b"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "main_full/fc4/BiasAdd"
+  op: "BiasAdd"
+  input: "main_full/fc4/MatMul"
+  input: "main_full/fc4/bias/read"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "data_format"
+    value {
+      s: "NHWC"
+    }
+  }
+}
+node {
+  name: "main_full/relu4"
+  op: "Elu"
+  input: "main_full/fc4/BiasAdd"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "main_full/dct"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+          dim {
+            size: 1
+          }
+          dim {
+            size: 32
+          }
+          dim {
+            size: 32
+          }
+        }
+        tensor_content: "\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\363\0045>\017\261\177>\254:}>\370Sx>\010\tq>\330kg>\032\224[>\002\237M>\371\256=>J\353+>\300\177\030>=\234\003>\200\350\332=\324|\254=\314\317x=\203@\026=0\373H<0\373H\274\203@\026\275\314\317x\275\324|\254\275\200\350\332\275=\234\003\276\300\177\030\276J\353+\276\371\256=\276\002\237M\276\032\224[\276\330kg\276\010\tq\276\370Sx\276\254:}\276\017\261\177\276m\304~>\013\372t>\230\305a>\003\344E>\231g\">\352Z\361=1\240\224=6\275\310<6\275\310\2741\240\224\275\352Z\361\275\231g\"\276\003\344E\276\230\305a\276\013\372t\276m\304~\276m\304~\276\013\372t\276\230\305a\276\003\344E\276\231g\"\276\352Z\361\2751\240\224\2756\275\310\2746\275\310<1\240\224=\352Z\361=\231g\">\003\344E>\230\305a>\013\372t>m\304~>\254:}>\330kg>\371\256=>=\234\003>\314\317x=0\373H\274\324|\254\275\300\177\030\276\002\237M\276\010\tq\276\017\261\177\276\370Sx\276\032\224[\276J\353+\276\200\350\332\275\203@\026\275\203@\026=\200\350\332=J\353+>\032\224[>\370Sx>\017\261\177>\010\tq>\002\237M>\300\177\030>\324|\254=0\373H<\314\317x\275=\234\003\276\371\256=\276\330kg\276\254:}\276\276\024{>1\333T>\3329\016>\302\305G=\302\305G\275\3329\016\2761\333T\276\276\024{\276\276\024{\2761\333T\276\3329\016\276\302\305G\275\302\305G=\3329\016>1\333T>\276\024{>\276\024{>1\333T>\3329\016>\302\305G=\302\305G\275\3329\016\2761\333T\276\276\024{\276\276\024{\2761\333T\276\3329\016\276\302\305G\275\302\305G=\3329\016>1\333T>\276\024{>\370Sx>\371\256=>\324|\254=\203@\026\275\300\177\030\276\330kg\276\017\261\177\276\032\224[\276=\234\003\2760\373H\274\200\350\332=\002\237M>\254:}>\010\tq>J\353+>\314\317x=\314\317x\275J\353+\276\010\tq\276\254:}\276\002\237M\276\200\350\332\2750\373H<=\234\003>\032\224[>\017\261\177>\330kg>\300\177\030>\203@\026=\324|\254\275\371\256=\276\370Sx\276\013\372t>\231g\">6\275\310<\352Z\361\275\230\305a\276m\304~\276\003\344E\2761\240\224\2751\240\224=\003\344E>m\304~>\230\305a>\352Z\361=6\275\310\274\231g\"\276\013\372t\276\013\372t\276\231g\"\2766\275\310\274\352Z\361=\230\305a>m\304~>\003\344E>1\240\224=1\240\224\275\003\344E\276m\304~\276\230\305a\276\352Z\361\2756\275\310<\231g\">\013\372t>\010\tq>=\234\003>\203@\026\275\371\256=\276\017\261\177\276\002\237M\276\314\317x\275\200\350\332=\330kg>\370Sx>\300\177\030>0\373H\274J\353+\276\254:}\276\032\224[\276\324|\254\275\324|\254=\032\224[>\254:}>J\353+>0\373H<\300\177\030\276\370Sx\276\330kg\276\200\350\332\275\314\317x=\002\237M>\017\261\177>\371\256=>\203@\026==\234\003\276\010\tq\276^\203l>\025\357\303=\025\357\303\275^\203l\276^\203l\276\025\357\303\275\025\357\303=^\203l>^\203l>\025\357\303=\025\357\303\275^\203l\276^\203l\276\025\357\303\275\025\357\303=^\203l>^\203l>\025\357\303=\025\357\303\275^\203l\276^\203l\276\025\357\303\275\025\357\303=^\203l>^\203l>\025\357\303=\025\357\303\275^\203l\276^\203l\276\025\357\303\275\025\357\303=^\203l>\330kg>\314\317x=\300\177\030\276\017\261\177\276J\353+\276\203@\026=\032\224[>\010\tq>\324|\254==\234\003\276\254:}\276\371\256=\2760\373H<\002\237M>\370Sx>\200\350\332=\200\350\332\275\370Sx\276\002\237M\2760\373H\274\371\256=>\254:}>=\234\003>\324|\254\275\010\tq\276\032\224[\276\203@\026\275J\353+>\017\261\177>\300\177\030>\314\317x\275\330kg\276\230\305a>6\275\310<\003\344E\276\013\372t\2761\240\224\275\231g\">m\304~>\352Z\361=\352Z\361\275m\304~\276\231g\"\2761\240\224=\013\372t>\003\344E>6\275\310\274\230\305a\276\230\305a\2766\275\310\274\003\344E>\013\372t>1\240\224=\231g\"\276m\304~\276\352Z\361\275\352Z\361=m\304~>\231g\">1\240\224\275\013\372t\276\003\344E\2766\275\310<\230\305a>\032\224[>0\373H\274\330kg\276\002\237M\276\203@\026=\010\tq>\371\256=>\314\317x\275\370Sx\276J\353+\276\324|\254=\254:}>\300\177\030>\200\350\332\275\017\261\177\276=\234\003\276=\234\003>\017\261\177>\200\350\332=\300\177\030\276\254:}\276\324|\254\275J\353+>\370Sx>\314\317x=\371\256=\276\010\tq\276\203@\026\275\002\237M>\330kg>0\373H<\032\224[\2761\333T>\302\305G\275\276\024{\276\3329\016\276\3329\016>\276\024{>\302\305G=1\333T\2761\333T\276\302\305G=\276\024{>\3329\016>\3329\016\276\276\024{\276\302\305G\2751\333T>1\333T>\302\305G\275\276\024{\276\3329\016\276\3329\016>\276\024{>\302\305G=1\333T\2761\333T\276\302\305G=\276\024{>\3329\016>\3329\016\276\276\024{\276\302\305G\2751\333T>\002\237M>\324|\254\275\017\261\177\276\314\317x\275\032\224[>\371\256=>\200\350\332\275\254:}\276\203@\026\275\330kg>J\353+>=\234\003\276\370Sx\2760\373H\274\010\tq>\300\177\030>\300\177\030\276\010\tq\2760\373H<\370Sx>=\234\003>J\353+\276\330kg\276\203@\026=\254:}>\200\350\332=\371\256=\276\032\224[\276\314\317x=\017\261\177>\324|\254=\002\237M\276\003\344E>\352Z\361\275\013\372t\2766\275\310<m\304~>1\240\224=\230\305a\276\231g\"\276\231g\">\230\305a>1\240\224\275m\304~\2766\275\310\274\013\372t>\352Z\361=\003\344E\276\003\344E\276\352Z\361=\013\372t>6\275\310\274m\304~\2761\240\224\275\230\305a>\231g\">\231g\"\276\230\305a\2761\240\224=m\304~>6\275\310<\013\372t\276\352Z\361\275\003\344E>\371\256=>\300\177\030\276\032\224[\276\200\350\332=\010\tq>\314\317x\275\254:}\2760\373H<\017\261\177>\203@\026=\370Sx\276\324|\254\275\330kg>=\234\003>\002\237M\276J\353+\276J\353+>\002\237M>=\234\003\276\330kg\276\324|\254=\370Sx>\203@\026\275\017\261\177\2760\373H\274\254:}>\314\317x=\010\tq\276\200\350\332\275\032\224[>\300\177\030>\371\256=\276\363\0045>\363\0045\276\363\0045\276\363\0045>\363\0045>\363\0045\276\363\0045\276\363\0045>\363\0045>\363\0045\276\363\0045\276\363\0045>\363\0045>\363\0045\276\363\0045\276\363\0045>\363\0045>\363\0045\276\363\0045\276\363\0045>\363\0045>\363\0045\276\363\0045\276\363\0045>\363\0045>\363\0045\276\363\0045\276\363\0045>\363\0045>\363\0045\276\363\0045\276\363\0045>J\353+>\002\237M\276=\234\003\276\330kg>\324|\254=\370Sx\276\203@\026\275\017\261\177>0\373H\274\254:}\276\314\317x=\010\tq>\200\350\332\275\032\224[\276\300\177\030>\371\256=>\371\256=\276\300\177\030\276\032\224[>\200\350\332=\010\tq\276\314\317x\275\254:}>0\373H<\017\261\177\276\203@\026=\370Sx>\324|\254\275\330kg\276=\234\003>\002\237M>J\353+\276\231g\">\230\305a\2761\240\224\275m\304~>6\275\310\274\013\372t\276\352Z\361=\003\344E>\003\344E\276\352Z\361\275\013\372t>6\275\310<m\304~\2761\240\224=\230\305a>\231g\"\276\231g\"\276\230\305a>1\240\224=m\304~\2766\275\310<\013\372t>\352Z\361\275\003\344E\276\003\344E>\352Z\361=\013\372t\2766\275\310\274m\304~>1\240\224\275\230\305a\276\231g\">\300\177\030>\010\tq\2760\373H\274\370Sx>=\234\003\276J\353+\276\330kg>\203@\026=\254:}\276\200\350\332=\371\256=>\032\224[\276\314\317x\275\017\261\177>\324|\254\275\002\237M\276\002\237M>\324|\254=\017\261\177\276\314\317x=\032\224[>\371\256=\276\200\350\332\275\254:}>\203@\026\275\330kg\276J\353+>=\234\003>\370Sx\2760\373H<\010\tq>\300\177\030\276\3329\016>\276\024{\276\302\305G=1\333T>1\333T\276\302\305G\275\276\024{>\3329\016\276\3329\016\276\276\024{>\302\305G\2751\333T\2761\333T>\302\305G=\276\024{\276\3329\016>\3329\016>\276\024{\276\302\305G=1\333T>1\333T\276\302\305G\275\276\024{>\3329\016\276\3329\016\276\276\024{>\302\305G\2751\333T\2761\333T>\302\305G=\276\024{\276\3329\016>=\234\003>\017\261\177\276\200\350\332=\300\177\030>\254:}\276\324|\254=J\353+>\370Sx\276\314\317x=\371\256=>\010\tq\276\203@\026=\002\237M>\330kg\2760\373H<\032\224[>\032\224[\2760\373H\274\330kg>\002\237M\276\203@\026\275\010\tq>\371\256=\276\314\317x\275\370Sx>J\353+\276\324|\254\275\254:}>\300\177\030\276\200\350\332\275\017\261\177>=\234\003\276\352Z\361=m\304~\276\231g\">1\240\224=\013\372t\276\003\344E>6\275\310<\230\305a\276\230\305a>6\275\310\274\003\344E\276\013\372t>1\240\224\275\231g\"\276m\304~>\352Z\361\275\352Z\361\275m\304~>\231g\"\2761\240\224\275\013\372t>\003\344E\2766\275\310\274\230\305a>\230\305a\2766\275\310<\003\344E>\013\372t\2761\240\224=\231g\">m\304~\276\352Z\361=\200\350\332=\370Sx\276\002\237M>0\373H\274\371\256=\276\254:}>=\234\003\276\324|\254\275\010\tq>\032\224[\276\203@\026=J\353+>\017\261\177\276\300\177\030>\314\317x=\330kg\276\330kg>\314\317x\275\300\177\030\276\017\261\177>J\353+\276\203@\026\275\032\224[>\010\tq\276\324|\254==\234\003>\254:}\276\371\256=>0\373H<\002\237M\276\370Sx>\200\350\332\275\025\357\303=^\203l\276^\203l>\025\357\303\275\025\357\303\275^\203l>^\203l\276\025\357\303=\025\357\303=^\203l\276^\203l>\025\357\303\275\025\357\303\275^\203l>^\203l\276\025\357\303=\025\357\303=^\203l\276^\203l>\025\357\303\275\025\357\303\275^\203l>^\203l\276\025\357\303=\025\357\303=^\203l\276^\203l>\025\357\303\275\025\357\303\275^\203l>^\203l\276\025\357\303=\324|\254=\032\224[\276\254:}>J\353+\2760\373H<\300\177\030>\370Sx\276\330kg>\200\350\332\275\314\317x\275\002\237M>\017\261\177\276\371\256=>\203@\026\275=\234\003\276\010\tq>\010\tq\276=\234\003>\203@\026=\371\256=\276\017\261\177>\002\237M\276\314\317x=\200\350\332=\330kg\276\370Sx>\300\177\030\2760\373H\274J\353+>\254:}\276\032\224[>\324|\254\2751\240\224=\003\344E\276m\304~>\230\305a\276\352Z\361=6\275\310<\231g\"\276\013\372t>\013\372t\276\231g\">6\275\310\274\352Z\361\275\230\305a>m\304~\276\003\344E>1\240\224\2751\240\224\275\003\344E>m\304~\276\230\305a>\352Z\361\2756\275\310\274\231g\">\013\372t\276\013\372t>\231g\"\2766\275\310<\352Z\361=\230\305a\276m\304~>\003\344E\2761\240\224=\314\317x=J\353+\276\010\tq>\254:}\276\002\237M>\200\350\332\2750\373H\274=\234\003>\032\224[\276\017\261\177>\330kg\276\300\177\030>\203@\026\275\324|\254\275\371\256=>\370Sx\276\370Sx>\371\256=\276\324|\254=\203@\026=\300\177\030\276\330kg>\017\261\177\276\032\224[>=\234\003\2760\373H<\200\350\332=\002\237M\276\254:}>\010\tq\276J\353+>\314\317x\275\302\305G=\3329\016\2761\333T>\276\024{\276\276\024{>1\333T\276\3329\016>\302\305G\275\302\305G\275\3329\016>1\333T\276\276\024{>\276\024{\2761\333T>\3329\016\276\302\305G=\302\305G=\3329\016\2761\333T>\276\024{\276\276\024{>1\333T\276\3329\016>\302\305G\275\302\305G\275\3329\016>1\333T\276\276\024{>\276\024{\2761\333T>\3329\016\276\302\305G=\203@\026=\200\350\332\275J\353+>\032\224[\276\370Sx>\017\261\177\276\010\tq>\002\237M\276\300\177\030>\324|\254\2750\373H<\314\317x==\234\003\276\371\256=>\330kg\276\254:}>\254:}\276\330kg>\371\256=\276=\234\003>\314\317x\2750\373H\274\324|\254=\300\177\030\276\002\237M>\010\tq\276\017\261\177>\370Sx\276\032\224[>J\353+\276\200\350\332=\203@\026\2756\275\310<1\240\224\275\352Z\361=\231g\"\276\003\344E>\230\305a\276\013\372t>m\304~\276m\304~>\013\372t\276\230\305a>\003\344E\276\231g\">\352Z\361\2751\240\224=6\275\310\2746\275\310\2741\240\224=\352Z\361\275\231g\">\003\344E\276\230\305a>\013\372t\276m\304~>m\304~\276\013\372t>\230\305a\276\003\344E>\231g\"\276\352Z\361=1\240\224\2756\275\310<0\373H<\203@\026\275\314\317x=\324|\254\275\200\350\332==\234\003\276\300\177\030>J\353+\276\371\256=>\002\237M\276\032\224[>\330kg\276\010\tq>\370Sx\276\254:}>\017\261\177\276\017\261\177>\254:}\276\370Sx>\010\tq\276\330kg>\032\224[\276\002\237M>\371\256=\276J\353+>\300\177\030\276=\234\003>\200\350\332\275\324|\254=\314\317x\275\203@\026=0\373H\274"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/idct"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+          dim {
+            size: 1
+          }
+          dim {
+            size: 32
+          }
+          dim {
+            size: 32
+          }
+        }
+        tensor_content: "\363\0045>\017\261\177>m\304~>\254:}>\276\024{>\370Sx>\013\372t>\010\tq>^\203l>\330kg>\230\305a>\032\224[>1\333T>\002\237M>\003\344E>\371\256=>\363\0045>J\353+>\231g\">\300\177\030>\3329\016>=\234\003>\352Z\361=\200\350\332=\025\357\303=\324|\254=1\240\224=\314\317x=\302\305G=\203@\026=6\275\310<0\373H<\363\0045>\254:}>\013\372t>\330kg>1\333T>\371\256=>\231g\">=\234\003>\025\357\303=\314\317x=6\275\310<0\373H\274\302\305G\275\324|\254\275\352Z\361\275\300\177\030\276\363\0045\276\002\237M\276\230\305a\276\010\tq\276\276\024{\276\017\261\177\276m\304~\276\370Sx\276^\203l\276\032\224[\276\003\344E\276J\353+\276\3329\016\276\200\350\332\2751\240\224\275\203@\026\275\363\0045>\370Sx>\230\305a>\371\256=>\3329\016>\324|\254=6\275\310<\203@\026\275\025\357\303\275\300\177\030\276\003\344E\276\330kg\276\276\024{\276\017\261\177\276\013\372t\276\032\224[\276\363\0045\276=\234\003\2761\240\224\2750\373H\274\302\305G=\200\350\332=\231g\">\002\237M>^\203l>\254:}>m\304~>\010\tq>1\333T>J\353+>\352Z\361=\314\317x=\363\0045>\010\tq>\003\344E>=\234\003>\302\305G=\203@\026\275\352Z\361\275\371\256=\276^\203l\276\017\261\177\276\013\372t\276\002\237M\276\3329\016\276\314\317x\2756\275\310<\200\350\332=\363\0045>\330kg>m\304~>\370Sx>1\333T>\300\177\030>1\240\224=0\373H\274\025\357\303\275J\353+\276\230\305a\276\254:}\276\276\024{\276\032\224[\276\231g\"\276\324|\254\275\363\0045>\330kg>\231g\">\314\317x=\302\305G\275\300\177\030\276\230\305a\276\017\261\177\276^\203l\276J\353+\2761\240\224\275\203@\026=\3329\016>\032\224[>m\304~>\010\tq>\363\0045>\324|\254=6\275\310\274=\234\003\2761\333T\276\254:}\276\013\372t\276\371\256=\276\025\357\303\2750\373H<\352Z\361=\002\237M>\276\024{>\370Sx>\003\344E>\200\350\332=\363\0045>\032\224[>\352Z\361=0\373H\274\3329\016\276\330kg\276m\304~\276\002\237M\276\025\357\303\275\203@\026=\231g\">\010\tq>\276\024{>\371\256=>1\240\224=\314\317x\275\363\0045\276\370Sx\276\013\372t\276J\353+\276\302\305G\275\324|\254=\003\344E>\254:}>^\203l>\300\177\030>6\275\310<\200\350\332\2751\333T\276\017\261\177\276\230\305a\276=\234\003\276\363\0045>\002\237M>1\240\224=\324|\254\2751\333T\276\017\261\177\276\003\344E\276\314\317x\275\025\357\303=\032\224[>m\304~>\371\256=>\302\305G=\200\350\332\275\230\305a\276\254:}\276\363\0045\276\203@\026\275\352Z\361=\330kg>\276\024{>J\353+>6\275\310<=\234\003\276^\203l\276\370Sx\276\231g\"\2760\373H\274\3329\016>\010\tq>\013\372t>\300\177\030>\363\0045>\371\256=>6\275\310<\300\177\030\276\276\024{\276\032\224[\2761\240\224\275\200\350\332=^\203l>\010\tq>\352Z\361=\314\317x\2751\333T\276\254:}\276\231g\"\2760\373H<\363\0045>\017\261\177>\003\344E>\203@\026=\3329\016\276\370Sx\276\230\305a\276\324|\254\275\025\357\303=\330kg>\013\372t>=\234\003>\302\305G\275\002\237M\276m\304~\276J\353+\276\363\0045>J\353+>6\275\310\274\002\237M\276\276\024{\276=\234\003\2761\240\224=\330kg>^\203l>\324|\254=\352Z\361\275\370Sx\2761\333T\276\203@\026\275\231g\">\017\261\177>\363\0045>0\373H\274\003\344E\276\254:}\276\3329\016\276\314\317x=\230\305a>\010\tq>\025\357\303=\200\350\332\275\013\372t\276\032\224[\276\302\305G\275\300\177\030>m\304~>\371\256=>\363\0045>\300\177\030>1\240\224\275\010\tq\2761\333T\2760\373H\274\003\344E>\370Sx>\025\357\303==\234\003\276m\304~\276J\353+\276\302\305G=\330kg>\230\305a>\203@\026=\363\0045\276\254:}\276\352Z\361\275\200\350\332=\276\024{>\371\256=>6\275\310\274\032\224[\276^\203l\276\314\317x\275\231g\">\017\261\177>\3329\016>\324|\254\275\013\372t\276\002\237M\276\363\0045>=\234\003>\352Z\361\275\017\261\177\276\3329\016\276\200\350\332=m\304~>\300\177\030>\025\357\303\275\254:}\276\231g\"\276\324|\254=\276\024{>J\353+>1\240\224\275\370Sx\276\363\0045\276\314\317x=\013\372t>\371\256=>\302\305G\275\010\tq\276\003\344E\276\203@\026=^\203l>\002\237M>6\275\310\274\330kg\2761\333T\2760\373H<\230\305a>\032\224[>\363\0045>\200\350\332=\231g\"\276\370Sx\276\302\305G\275\002\237M>\230\305a>0\373H\274^\203l\276\371\256=\2761\240\224=\254:}>\3329\016>=\234\003\276m\304~\276\324|\254\275\363\0045>\010\tq>6\275\310<\032\224[\2761\333T\276\203@\026=\013\372t>J\353+>\025\357\303\275\017\261\177\276\352Z\361\275\300\177\030>\276\024{>\314\317x=\003\344E\276\330kg\276\363\0045>\324|\254=\003\344E\276\032\224[\276\302\305G=\254:}>\352Z\361=J\353+\276^\203l\2760\373H<\013\372t>\300\177\030>\3329\016\276\370Sx\2766\275\310\274\330kg>\363\0045>\200\350\332\275m\304~\276\314\317x\2751\333T>\002\237M>1\240\224\275\017\261\177\276\025\357\303\275\371\256=>\230\305a>\203@\026\275\276\024{\276=\234\003\276\231g\">\010\tq>\363\0045>\314\317x=\230\305a\276J\353+\276\3329\016>\010\tq>6\275\310\274\254:}\276\025\357\303\275\002\237M>\003\344E>\200\350\332\275\276\024{\2760\373H\274\013\372t>=\234\003>\363\0045\276\032\224[\2761\240\224=\017\261\177>\302\305G=\330kg\276\231g\"\276\300\177\030>^\203l>\203@\026\275m\304~\276\324|\254\2751\333T>\371\256=>\352Z\361\275\370Sx\276\363\0045>\203@\026=\013\372t\276\200\350\332\2751\333T>J\353+>\231g\"\276\032\224[\276\025\357\303=\370Sx>6\275\310\274\017\261\177\276\302\305G\275\010\tq>\352Z\361=\002\237M\276\363\0045\276\300\177\030>\230\305a>\324|\254\275\276\024{\2760\373H<m\304~>\314\317x=^\203l\276=\234\003\276\003\344E>\371\256=>\3329\016\276\330kg\2761\240\224=\254:}>\363\0045>0\373H<m\304~\276\203@\026\275\276\024{>\314\317x=\013\372t\276\324|\254\275^\203l>\200\350\332=\230\305a\276=\234\003\2761\333T>\300\177\030>\003\344E\276J\353+\276\363\0045>\371\256=>\231g\"\276\002\237M\276\3329\016>\032\224[>\352Z\361\275\330kg\276\025\357\303=\010\tq>1\240\224\275\370Sx\276\302\305G=\254:}>6\275\310\274\017\261\177\276\363\0045>0\373H\274m\304~\276\203@\026=\276\024{>\314\317x\275\013\372t\276\324|\254=^\203l>\200\350\332\275\230\305a\276=\234\003>1\333T>\300\177\030\276\003\344E\276J\353+>\363\0045>\371\256=\276\231g\"\276\002\237M>\3329\016>\032\224[\276\352Z\361\275\330kg>\025\357\303=\010\tq\2761\240\224\275\370Sx>\302\305G=\254:}\2766\275\310\274\017\261\177>\363\0045>\203@\026\275\013\372t\276\200\350\332=1\333T>J\353+\276\231g\"\276\032\224[>\025\357\303=\370Sx\2766\275\310\274\017\261\177>\302\305G\275\010\tq\276\352Z\361=\002\237M>\363\0045\276\300\177\030\276\230\305a>\324|\254=\276\024{\2760\373H\274m\304~>\314\317x\275^\203l\276=\234\003>\003\344E>\371\256=\276\3329\016\276\330kg>1\240\224=\254:}\276\363\0045>\314\317x\275\230\305a\276J\353+>\3329\016>\010\tq\2766\275\310\274\254:}>\025\357\303\275\002\237M\276\003\344E>\200\350\332=\276\024{\2760\373H<\013\372t>=\234\003\276\363\0045\276\032\224[>1\240\224=\017\261\177\276\302\305G=\330kg>\231g\"\276\300\177\030\276^\203l>\203@\026=m\304~\276\324|\254=1\333T>\371\256=\276\352Z\361\275\370Sx>\363\0045>\324|\254\275\003\344E\276\032\224[>\302\305G=\254:}\276\352Z\361=J\353+>^\203l\2760\373H\274\013\372t>\300\177\030\276\3329\016\276\370Sx>6\275\310\274\330kg\276\363\0045>\200\350\332=m\304~\276\314\317x=1\333T>\002\237M\2761\240\224\275\017\261\177>\025\357\303\275\371\256=\276\230\305a>\203@\026=\276\024{\276=\234\003>\231g\">\010\tq\276\363\0045>\200\350\332\275\231g\"\276\370Sx>\302\305G\275\002\237M\276\230\305a>0\373H<^\203l\276\371\256=>1\240\224=\254:}\276\3329\016>=\234\003>m\304~\276\324|\254=\363\0045>\010\tq\2766\275\310<\032\224[>1\333T\276\203@\026\275\013\372t>J\353+\276\025\357\303\275\017\261\177>\352Z\361\275\300\177\030\276\276\024{>\314\317x\275\003\344E\276\330kg>\363\0045>=\234\003\276\352Z\361\275\017\261\177>\3329\016\276\200\350\332\275m\304~>\300\177\030\276\025\357\303\275\254:}>\231g\"\276\324|\254\275\276\024{>J\353+\2761\240\224\275\370Sx>\363\0045\276\314\317x\275\013\372t>\371\256=\276\302\305G\275\010\tq>\003\344E\276\203@\026\275^\203l>\002\237M\2766\275\310\274\330kg>1\333T\2760\373H\274\230\305a>\032\224[\276\363\0045>\300\177\030\2761\240\224\275\010\tq>1\333T\2760\373H<\003\344E>\370Sx\276\025\357\303==\234\003>m\304~\276J\353+>\302\305G=\330kg\276\230\305a>\203@\026\275\363\0045\276\254:}>\352Z\361\275\200\350\332\275\276\024{>\371\256=\2766\275\310\274\032\224[>^\203l\276\314\317x=\231g\">\017\261\177\276\3329\016>\324|\254=\013\372t\276\002\237M>\363\0045>J\353+\2766\275\310\274\002\237M>\276\024{\276=\234\003>1\240\224=\330kg\276^\203l>\324|\254\275\352Z\361\275\370Sx>1\333T\276\203@\026=\231g\">\017\261\177\276\363\0045>0\373H<\003\344E\276\254:}>\3329\016\276\314\317x\275\230\305a>\010\tq\276\025\357\303=\200\350\332=\013\372t\276\032\224[>\302\305G\275\300\177\030\276m\304~>\371\256=\276\363\0045>\371\256=\2766\275\310<\300\177\030>\276\024{\276\032\224[>1\240\224\275\200\350\332\275^\203l>\010\tq\276\352Z\361=\314\317x=1\333T\276\254:}>\231g\"\2760\373H\274\363\0045>\017\261\177\276\003\344E>\203@\026\275\3329\016\276\370Sx>\230\305a\276\324|\254=\025\357\303=\330kg\276\013\372t>=\234\003\276\302\305G\275\002\237M>m\304~\276J\353+>\363\0045>\002\237M\2761\240\224=\324|\254=1\333T\276\017\261\177>\003\344E\276\314\317x=\025\357\303=\032\224[\276m\304~>\371\256=\276\302\305G=\200\350\332=\230\305a\276\254:}>\363\0045\276\203@\026=\352Z\361=\330kg\276\276\024{>J\353+\2766\275\310<=\234\003>^\203l\276\370Sx>\231g\"\2760\373H<\3329\016>\010\tq\276\013\372t>\300\177\030\276\363\0045>\032\224[\276\352Z\361=0\373H<\3329\016\276\330kg>m\304~\276\002\237M>\025\357\303\275\203@\026\275\231g\">\010\tq\276\276\024{>\371\256=\2761\240\224=\314\317x=\363\0045\276\370Sx>\013\372t\276J\353+>\302\305G\275\324|\254\275\003\344E>\254:}\276^\203l>\300\177\030\2766\275\310<\200\350\332=1\333T\276\017\261\177>\230\305a\276=\234\003>\363\0045>\330kg\276\231g\">\314\317x\275\302\305G\275\300\177\030>\230\305a\276\017\261\177>^\203l\276J\353+>1\240\224\275\203@\026\275\3329\016>\032\224[\276m\304~>\010\tq\276\363\0045>\324|\254\2756\275\310\274=\234\003>1\333T\276\254:}>\013\372t\276\371\256=>\025\357\303\2750\373H\274\352Z\361=\002\237M\276\276\024{>\370Sx\276\003\344E>\200\350\332\275\363\0045>\010\tq\276\003\344E>=\234\003\276\302\305G=\203@\026=\352Z\361\275\371\256=>^\203l\276\017\261\177>\013\372t\276\002\237M>\3329\016\276\314\317x=6\275\310<\200\350\332\275\363\0045>\330kg\276m\304~>\370Sx\2761\333T>\300\177\030\2761\240\224=0\373H<\025\357\303\275J\353+>\230\305a\276\254:}>\276\024{\276\032\224[>\231g\"\276\324|\254=\363\0045>\370Sx\276\230\305a>\371\256=\276\3329\016>\324|\254\2756\275\310<\203@\026=\025\357\303\275\300\177\030>\003\344E\276\330kg>\276\024{\276\017\261\177>\013\372t\276\032\224[>\363\0045\276=\234\003>1\240\224\2750\373H<\302\305G=\200\350\332\275\231g\">\002\237M\276^\203l>\254:}\276m\304~>\010\tq\2761\333T>J\353+\276\352Z\361=\314\317x\275\363\0045>\254:}\276\013\372t>\330kg\2761\333T>\371\256=\276\231g\">=\234\003\276\025\357\303=\314\317x\2756\275\310<0\373H<\302\305G\275\324|\254=\352Z\361\275\300\177\030>\363\0045\276\002\237M>\230\305a\276\010\tq>\276\024{\276\017\261\177>m\304~\276\370Sx>^\203l\276\032\224[>\003\344E\276J\353+>\3329\016\276\200\350\332=1\240\224\275\203@\026=\363\0045>\017\261\177\276m\304~>\254:}\276\276\024{>\370Sx\276\013\372t>\010\tq\276^\203l>\330kg\276\230\305a>\032\224[\2761\333T>\002\237M\276\003\344E>\371\256=\276\363\0045>J\353+\276\231g\">\300\177\030\276\3329\016>=\234\003\276\352Z\361=\200\350\332\275\025\357\303=\324|\254\2751\240\224=\314\317x\275\302\305G=\203@\026\2756\275\310<0\373H\274"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Reshape_2/shape"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "\377\377\377\377 \000\000\000 \000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Reshape_2"
+  op: "Reshape"
+  input: "main_full/relu4"
+  input: "main_full/Reshape_2/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tshape"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/Shape"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "@\000\000\000`\000\000\000`\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/strided_slice/stack"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "main_full/strided_slice/stack_1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "main_full/strided_slice/stack_2"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "main_full/strided_slice"
+  op: "StridedSlice"
+  input: "main_full/Shape"
+  input: "main_full/strided_slice/stack"
+  input: "main_full/strided_slice/stack_1"
+  input: "main_full/strided_slice/stack_2"
+  attr {
+    key: "Index"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "begin_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "ellipsis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "end_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "new_axis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "shrink_axis_mask"
+    value {
+      i: 1
+    }
+  }
+}
+node {
+  name: "main_full/title_dct/multiples/1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "main_full/title_dct/multiples/2"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "main_full/title_dct/multiples"
+  op: "Pack"
+  input: "main_full/strided_slice"
+  input: "main_full/title_dct/multiples/1"
+  input: "main_full/title_dct/multiples/2"
+  attr {
+    key: "N"
+    value {
+      i: 3
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "axis"
+    value {
+      i: 0
+    }
+  }
+}
+node {
+  name: "main_full/title_dct"
+  op: "Tile"
+  input: "main_full/dct"
+  input: "main_full/title_dct/multiples"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tmultiples"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/Shape_1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "@\000\000\000`\000\000\000`\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/strided_slice_1/stack"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "main_full/strided_slice_1/stack_1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "main_full/strided_slice_1/stack_2"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "main_full/strided_slice_1"
+  op: "StridedSlice"
+  input: "main_full/Shape_1"
+  input: "main_full/strided_slice_1/stack"
+  input: "main_full/strided_slice_1/stack_1"
+  input: "main_full/strided_slice_1/stack_2"
+  attr {
+    key: "Index"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "begin_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "ellipsis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "end_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "new_axis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "shrink_axis_mask"
+    value {
+      i: 1
+    }
+  }
+}
+node {
+  name: "main_full/title_idct/multiples/1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "main_full/title_idct/multiples/2"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "main_full/title_idct/multiples"
+  op: "Pack"
+  input: "main_full/strided_slice_1"
+  input: "main_full/title_idct/multiples/1"
+  input: "main_full/title_idct/multiples/2"
+  attr {
+    key: "N"
+    value {
+      i: 3
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "axis"
+    value {
+      i: 0
+    }
+  }
+}
+node {
+  name: "main_full/title_idct"
+  op: "Tile"
+  input: "main_full/idct"
+  input: "main_full/title_idct/multiples"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tmultiples"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/mul_dct1"
+  op: "BatchMatMul"
+  input: "main_full/title_idct"
+  input: "main_full/Reshape_2"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "adj_x"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "adj_y"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "main_full/mul_idct1"
+  op: "BatchMatMul"
+  input: "main_full/mul_dct1"
+  input: "main_full/title_dct"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "adj_x"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "adj_y"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "main_full/sub"
+  op: "Sub"
+  input: "Placeholder_1"
+  input: "main_full/mul_idct1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "main_full/Square"
+  op: "Square"
+  input: "main_full/sub"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "main_full/Const"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "\000\000\000\000\001\000\000\000\002\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Mean"
+  op: "Mean"
+  input: "main_full/Square"
+  input: "main_full/Const"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "keep_dims"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "main_full/Const_1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+          dim {
+            size: 1
+          }
+          dim {
+            size: 32
+          }
+          dim {
+            size: 32
+          }
+        }
+        tensor_content: "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200\277\000\000\200?\000\000\200?\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277\000\000\200?\000\000\200\277\000\000\200\277\000\000\200?\000\000\200\277\000\000\200?\000\000\200?\000\000\200\277"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Tile/multiples"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "@\000\000\000\001\000\000\000\001\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Tile"
+  op: "Tile"
+  input: "main_full/Const_1"
+  input: "main_full/Tile/multiples"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tmultiples"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/sub_1"
+  op: "Sub"
+  input: "main_full/mul_idct1"
+  input: "Placeholder_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "main_full/Reshape_3/shape"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "\377\377\377\377 \000\000\000 \000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Reshape_3"
+  op: "Reshape"
+  input: "main_full/sub_1"
+  input: "main_full/Reshape_3/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tshape"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "main_full/MatMul"
+  op: "BatchMatMul"
+  input: "main_full/Tile"
+  input: "main_full/Reshape_3"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "adj_x"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "adj_y"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "main_full/MatMul_1"
+  op: "BatchMatMul"
+  input: "main_full/MatMul"
+  input: "main_full/Tile"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "adj_x"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "adj_y"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "main_full/Square_1"
+  op: "Square"
+  input: "main_full/MatMul_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "main_full/add/y"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 9.999999747378752e-05
+      }
+    }
+  }
+}
+node {
+  name: "main_full/add"
+  op: "Add"
+  input: "main_full/Square_1"
+  input: "main_full/add/y"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "main_full/Sqrt"
+  op: "Sqrt"
+  input: "main_full/add"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "main_full/Const_2"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "\000\000\000\000\001\000\000\000\002\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "main_full/Mean_1"
+  op: "Mean"
+  input: "main_full/Sqrt"
+  input: "main_full/Const_2"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "keep_dims"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "save/Const"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+        }
+        string_val: "model"
+      }
+    }
+  }
+}
+node {
+  name: "save/SaveV2/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 8
+          }
+        }
+        string_val: "main_full/fc1/bias"
+        string_val: "main_full/fc1/kernel"
+        string_val: "main_full/fc2/bias"
+        string_val: "main_full/fc2/kernel"
+        string_val: "main_full/fc3/bias"
+        string_val: "main_full/fc3/kernel"
+        string_val: "main_full/fc4/bias"
+        string_val: "main_full/fc4/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "save/SaveV2/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 8
+          }
+        }
+        string_val: ""
+        string_val: ""
+        string_val: ""
+        string_val: ""
+        string_val: ""
+        string_val: ""
+        string_val: ""
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/SaveV2"
+  op: "SaveV2"
+  input: "save/Const"
+  input: "save/SaveV2/tensor_names"
+  input: "save/SaveV2/shape_and_slices"
+  input: "main_full/fc1/bias"
+  input: "main_full/fc1/kernel"
+  input: "main_full/fc2/bias"
+  input: "main_full/fc2/kernel"
+  input: "main_full/fc3/bias"
+  input: "main_full/fc3/kernel"
+  input: "main_full/fc4/bias"
+  input: "main_full/fc4/kernel"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+        type: DT_FLOAT
+        type: DT_FLOAT
+        type: DT_FLOAT
+        type: DT_FLOAT
+        type: DT_FLOAT
+        type: DT_FLOAT
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
+  name: "save/control_dependency"
+  op: "Identity"
+  input: "save/Const"
+  input: "^save/SaveV2"
+  attr {
+    key: "T"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@save/Const"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2/tensor_names"
+  op: "Const"
+  device: "/device:CPU:0"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 8
+          }
+        }
+        string_val: "main_full/fc1/bias"
+        string_val: "main_full/fc1/kernel"
+        string_val: "main_full/fc2/bias"
+        string_val: "main_full/fc2/kernel"
+        string_val: "main_full/fc3/bias"
+        string_val: "main_full/fc3/kernel"
+        string_val: "main_full/fc4/bias"
+        string_val: "main_full/fc4/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2/shape_and_slices"
+  op: "Const"
+  device: "/device:CPU:0"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 8
+          }
+        }
+        string_val: ""
+        string_val: ""
+        string_val: ""
+        string_val: ""
+        string_val: ""
+        string_val: ""
+        string_val: ""
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2/tensor_names"
+  input: "save/RestoreV2/shape_and_slices"
+  device: "/device:CPU:0"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+        type: DT_FLOAT
+        type: DT_FLOAT
+        type: DT_FLOAT
+        type: DT_FLOAT
+        type: DT_FLOAT
+        type: DT_FLOAT
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
+  name: "save/Assign"
+  op: "Assign"
+  input: "main_full/fc1/bias"
+  input: "save/RestoreV2"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/bias"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "save/Assign_1"
+  op: "Assign"
+  input: "main_full/fc1/kernel"
+  input: "save/RestoreV2:1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc1/kernel"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "save/Assign_2"
+  op: "Assign"
+  input: "main_full/fc2/bias"
+  input: "save/RestoreV2:2"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/bias"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "save/Assign_3"
+  op: "Assign"
+  input: "main_full/fc2/kernel"
+  input: "save/RestoreV2:3"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc2/kernel"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "save/Assign_4"
+  op: "Assign"
+  input: "main_full/fc3/bias"
+  input: "save/RestoreV2:4"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/bias"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "save/Assign_5"
+  op: "Assign"
+  input: "main_full/fc3/kernel"
+  input: "save/RestoreV2:5"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc3/kernel"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "save/Assign_6"
+  op: "Assign"
+  input: "main_full/fc4/bias"
+  input: "save/RestoreV2:6"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/bias"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "save/Assign_7"
+  op: "Assign"
+  input: "main_full/fc4/kernel"
+  input: "save/RestoreV2:7"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@main_full/fc4/kernel"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "save/restore_all"
+  op: "NoOp"
+  input: "^save/Assign"
+  input: "^save/Assign_1"
+  input: "^save/Assign_2"
+  input: "^save/Assign_3"
+  input: "^save/Assign_4"
+  input: "^save/Assign_5"
+  input: "^save/Assign_6"
+  input: "^save/Assign_7"
+}
+versions {
+  producer: 27
+}
