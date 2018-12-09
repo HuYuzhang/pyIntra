@@ -89,15 +89,15 @@ def drive():
                                        _weights_name=weights_name
                                        )
     
-    tensorboard_train_dir = '../../tensorboard/' + train_mode + '/train'
-    tensorboard_valid_dir = '../../tensorboard/' + train_mode + '/valid'
+    tensorboard_train_dir = '../../freq_32_tensorboard/' + train_mode + '/train'
+    tensorboard_valid_dir = '../../freq_32_tensorboard/' + train_mode + '/valid'
     if not os.path.exists(tensorboard_train_dir):
         os.makedirs(tensorboard_train_dir)
     if not os.path.exists(tensorboard_valid_dir):
         os.makedirs(tensorboard_valid_dir)
 
     saver = tf.train.Saver(max_to_keep=30)
-    checkpoint_dir = '../../model/' + train_mode + '/'
+    checkpoint_dir = '../../freq_32_model/' + train_mode + '/'
     if not os.path.exists(checkpoint_dir):
         os.makedirs(checkpoint_dir)
     with tf.Session() as sess:
@@ -212,8 +212,8 @@ def run_test():
     hf = h5py.File(h5_path)
         
     print("Loading data")
-    x = np.array(hf['data'], dtype=np.float32)[:10000]
-    y = np.array(hf['label'], dtype=np.float32)[:10000]
+    x = np.array(hf['data'], dtype=np.float32)
+    y = np.array(hf['label'], dtype=np.float32)
     length = x.shape[0]
     print("Finishing loading data")
     print(weights_name)
@@ -221,7 +221,7 @@ def run_test():
                                        inputs,
                                        targets,
                                        test=True,
-                                       freq=False,
+                                       freq=True,
                                        _weights_name=weights_name
                                        )
     print('finish build network')
@@ -242,6 +242,7 @@ def run_test():
         psnr_s = []
         ssim_s = []
         val_gen = val_generator()
+        val_cnt = 0
         for v_data, v_label in val_gen:
             val_satd, val_mse, recon = sess.run([satd_loss, mse_loss, pred], feed_dict={
                                             inputs: v_data, targets: v_label})
@@ -249,9 +250,10 @@ def run_test():
             recon = recon.reshape([-1, 32, 32]) * 255.0
             gt = v_label.reshape([-1, 32, 32]) * 255.0
             val_psnr, val_ssim = test_quality(gt, recon)
-            print('-----------> tmp data, psnr: %f, ssim: %f, mse loss: %f, satd_loss: %f<------------'%(np.mean(val_psnr), np.mean(val_ssim), np.mean(val_mse), np.mean(val_satd)))
-            psnr_s.extend(val_psnr)
-            ssim_s.extend(val_ssim)
+            val_cnt = val_cnt + batch_size
+            print('-----------> Step %d, Total: %d, psnr: %f, ssim: %f, mse loss: %f, satd_loss: %f<------------'%(val_cnt, length, val_psnr, val_ssim, np.mean(val_mse), np.mean(val_satd)))
+            psnr_s.append(val_psnr)
+            ssim_s.append(val_ssim)
         print('Finish testing, now psnr is: %f, and ssim is: %f'%(np.mean(psnr_s), np.mean(ssim_s)))
 
 
