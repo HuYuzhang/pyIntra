@@ -16,7 +16,7 @@ epochs = 1000
 def tf_build_model(module_name, weights_name, params, input_tensor, target_tensor, mode):
     with tf.variable_scope('main_full', reuse=tf.AUTO_REUSE):
         model_module = __import__(module_name)
-        satd_loss, mse_loss, recon = build_model(input_tensor, target_tensor, params=params, freq=True, test=True)
+        satd_loss, mse_loss, recon = model_module.build_model(input_tensor, target_tensor, params=params, freq=True, test=True)
         # model_module.build_model(
         #     input_tensor, output_tensor, params, mode=mode)
         return satd_loss, mse_loss, recon
@@ -63,9 +63,10 @@ def drive():
         saver.restore(sess, weights_name)
         # import IPython
         # IPython.embed()
-        graph = convert_variables_to_constants(sess, sess.graph_def, ['main_full/mul_idct1'])
+        # exit(0)
+        graph = convert_variables_to_constants(sess, sess.graph_def, ['main_full/4_dim_out_freq'])
         #graph = convert_variables_to_constants(sess, sess.graph_def, ['main_full/Reshape_1'])
-        tf.train.write_graph(graph,'.','graph_m%d_s%d_%s.pb' % (mode, num_scale, model_id),as_text=False)
+        tf.train.write_graph(graph,'../../pb32','graph_m%d_s%d_%s.pb' % (mode, num_scale, model_type),as_text=False)
 
 
 

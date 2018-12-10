@@ -202,8 +202,8 @@ def run_test():
     train_mode = sys.argv[3]
     weights_name = sys.argv[4]
     print(weights_name, train_mode, model_module_name)
-    inputs = tf.placeholder(tf.float32, [batch_size, 3072, 1, 1])
-    targets = tf.placeholder(tf.float32, [batch_size, 1024, 1, 1])
+    inputs = tf.placeholder(tf.float32, [batch_size, 64, 64, 1])
+    targets = tf.placeholder(tf.float32, [batch_size, 32, 32, 1])
 
     h5_path = '../../train/' + train_mode + '.h5'
 
@@ -233,8 +233,8 @@ def run_test():
     
 
     # Test reshape
-    tmp_input = np.zeros([batch_size, 64, 64])
-    tmp_label = np.zeros([batch_size, 32, 32])
+    tmp_input = np.zeros([batch_size, 64, 64, 1])
+    tmp_label = np.zeros([batch_size, 32, 32, 1])
     # Test reshape
     with tf.Session() as sess:
         if weights_name is None:
@@ -249,11 +249,11 @@ def run_test():
         val_gen = val_generator()
         val_cnt = 0
         for v_data, v_label in val_gen:
-            tmp_input[:,0:32,0:64] = v_data[:,:2048,:,:].reshape([-1,32,64])
-            tmp_input[:,32:64,0:32] = v_data[:,2048:,:,:].reshape([-1,32,32])
-            tmp_label = v_label.reshape([-1,32,32])
+            tmp_input[:,0:32,0:64,:] = v_data[:,:2048,:,:].reshape([-1,32,64,1])
+            tmp_input[:,32:64,0:32,:] = v_data[:,2048:,:,:].reshape([-1,32,32,1])
+            tmp_label = v_label.reshape([-1,32,32,1])
             val_satd, val_mse, recon = sess.run([satd_loss, mse_loss, pred], feed_dict={
-                                            inputs: v_data, targets: v_label})
+                                            inputs: tmp_input, targets: tmp_label})
 
             recon = recon.reshape([-1, 32, 32]) * 255.0
             gt = v_label.reshape([-1, 32, 32]) * 255.0

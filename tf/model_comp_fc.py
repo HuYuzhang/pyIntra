@@ -78,8 +78,8 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
     # Now we have to accept the input of size 64 * 64
     # So reshape Stage
     inputs = []
-    inputs.append(tf.reshape(tf.slice(input_tensor, [0,0,0],[batch_size,32,64]), [-1,2048]))
-    inputs.append(tf.reshape(tf.slice(input_tensor, [0,32,0],[batch_size,32,32]), [-1,1024]))
+    inputs.append(tf.reshape(tf.slice(input_tensor, [0,0,0,0],[batch_size,32,64,1]), [-1,2048]))
+    inputs.append(tf.reshape(tf.slice(input_tensor, [0,32,0,0],[batch_size,32,32,1]), [-1,1024]))
     input_layer = tf.concat(inputs, 1)
 
     target_tensor = tf.reshape(target_tensor, (-1,32,32))
