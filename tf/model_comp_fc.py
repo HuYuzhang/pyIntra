@@ -75,17 +75,16 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
     else:
         batch_size = 64
 
-    #input_tensor = tf.reshape(input_tensor,(-1,64,64))
-    target_tensor = tf.reshape(target_tensor, (-1,32,32))
+    # Now we have to accept the input of size 64 * 64
+    # So reshape Stage
+    inputs = []
+    inputs.append(tf.reshape(tf.slice(input_tensor, [0,0,0],[batch_size,32,64]), [-1,2048]))
+    inputs.append(tf.reshape(tf.slice(input_tensor, [0,32,0],[batch_size,32,32]), [-1,1024]))
+    input_layer = tf.concat(inputs, 1)
 
-    # so first slice
-    #inputs = []
-    #inputs.append(tf.reshape(tf.slice(input_tensor, [0,0,0],[batch_size,32,64]), [-1,2048]))
-    #inputs.append(tf.reshape(tf.slice(input_tensor, [0,32,0],[batch_size,32,32]), [-1,1024]))
-    #input_layer = tf.concat(inputs, 1)
-    
+    target_tensor = tf.reshape(target_tensor, (-1,32,32))
+    # Reshape stage
       
-    input_layer = tf.reshape(input_tensor, [-1, 3072])
 
     _fc1 = tf.layers.dense(input_layer, 3072, name='fc1')
 

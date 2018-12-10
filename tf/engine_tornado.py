@@ -231,6 +231,11 @@ def run_test():
 
     saver = tf.train.Saver()
     
+
+    # Test reshape
+    tmp_input = np.zeros([batch_size, 64, 64])
+    tmp_label = np.zeros([batch_size, 32, 32])
+    # Test reshape
     with tf.Session() as sess:
         if weights_name is None:
             print('error!, no weights_name')
@@ -244,6 +249,9 @@ def run_test():
         val_gen = val_generator()
         val_cnt = 0
         for v_data, v_label in val_gen:
+            tmp_input[:,0:32,0:64] = v_data[:,:2048,:,:].reshape([-1,32,64])
+            tmp_input[:,32:64,0:32] = v_data[:,2048:,:,:].reshape([-1,32,32])
+            tmp_label = v_label.reshape([-1,32,32])
             val_satd, val_mse, recon = sess.run([satd_loss, mse_loss, pred], feed_dict={
                                             inputs: v_data, targets: v_label})
 
