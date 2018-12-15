@@ -154,23 +154,25 @@ def build_model(input_tensor, target_tensor, params=None, freq=False, test=False
         freq_tensor = tf.reshape(fc4, (-1, 32, 32), name='3_dim_raw_output_freq')
         batch_dct = tf.tile(tf_dct, [tf.shape(input_tensor)[0],1,1],name='title_dct')
         batch_idct = tf.tile(tf_idct, [tf.shape(input_tensor)[0],1,1],name='title_idct')
+        freq_gt = tf.matmul(tf.matmul(batch_dct, target_tensor, name='freq_gt0'), batch_idct, name='freq_gt1')
         recon = tf.matmul(tf.matmul(batch_idct, freq_tensor, name='mul_dct1'), batch_dct, name='mul_idct1')
         # Note that here recon is of size "batch_size * 32 * 32"
-        mse_loss = tf.reduce_mean(tf.square((target_tensor-recon)))
+        freq_mse_loss = tf.reduce_mean(tf.square((freq_gt-freq_tensor)))
+        pixel_mse_loss = tf.reduce_mean(tf.square((target_tensor-recon)))
         satd_loss = SATD(recon, target_tensor)
         # loss = satd_loss
-        loss = mse_loss
+        loss = freq_mse_loss
         # now we just end the function because we don't need the train_op
         recon = tf.reshape(recon, (-1, 32, 32, 1), name='4_dim_out_freq')
         if test:
-            return satd_loss, mse_loss, recon
+            return satd_loss, freq_mse_loss, pixel_mse_loss, recon
         
         # for training, we need the train_op
         global_step = tf.Variable(0, trainable=False)
         learning_rate = tf.train.exponential_decay(params['learning_rate'], global_step=global_step, decay_steps = 10000, decay_rate=0.7)
         optimizer = tf.train.AdamOptimizer(learning_rate=params['learning_rate'])
         train_op = optimizer.minimize(loss=loss, global_step=tf.train.get_global_step())
-        return train_op, satd_loss, mse_loss, recon
+        return train_op, satd_loss, freq_mse_loss, pixel_mse_loss, recon
 
 
     else:
