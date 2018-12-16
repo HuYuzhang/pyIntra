@@ -9,7 +9,7 @@ import os
 import subprocess as sp
 from skimage.measure import compare_ssim as ssim
 from skimage.measure import compare_psnr as psnr
-from mylib import *
+from mylib import test_quality
 
 batch_size = 1024
 epochs = 1000
@@ -19,22 +19,22 @@ def tf_build_model(module_name, input_tensor, output_tensor, test=False, freq=Fa
     with tf.variable_scope('main_full', reuse=tf.AUTO_REUSE):
         model_module = __import__(module_name)
         if test:
-            satd_op, mse_op, pred = model_module.build_model(
-                input_tensor, output_tensor, params=None, freq=freq, test=test)
-            return satd_op, mse_op, pred
-        else:
-            train_op, satd_op, mse_op, pred = model_module.build_model(
+            satd_loss, freq_mse_loss, pixel_mse_loss, pred = model_module.build_model(
                 input_tensor, output_tensor, params=params, freq=freq, test=test)
-            return train_op, satd_op, mse_op, pred
+            return satd_loss, freq_mse_loss, pixel_mse_loss, pred
+        else:
+            train_op, satd_loss, freq_mse_loss, pixel_mse_loss, pred = model_module.build_model(
+                input_tensor, output_tensor, params=params, freq=freq, test=test)
+            return train_op, satd_loss, freq_mse_loss, pixel_mse_loss, pred
 
 
 def drive():
-    if len(sys.argv) == 2:
+    if len(sys.argv) < 8:
         # This is --help mode
         print(
             "Usage: model_module_name train_mode scale block_size init_lr batch_size [weights_name]")
+        exit(0)
     print(sys.argv)
-    block_size = 8
     model_module_name = sys.argv[2]
     train_mode = sys.argv[3]
     scale = int(sys.argv[4])
@@ -156,7 +156,7 @@ def drive():
         valid_pixel_mse_summary = tf.summary.scalar(
             train_mode + ' pixel_MSE loss', valid_pixel_mse_mean)
         valid_freq_mse_summary = tf.summary.scalar(
-            train_mode + ' pixel_MSE loss', valid_freq_mse_mean)
+            train_mode + ' freq_MSE loss', valid_freq_mse_mean)
         valid_satd_summary = tf.summary.scalar(
             train_mode + ' SATD loss', valid_satd_mean)
 
@@ -179,7 +179,7 @@ def drive():
                         inputs: v_data, targets: v_label})
                     val_pixel_mse_s.append(float(val_pixel_mse))
                     val_freq_mse_s.append(float(val_freq_mse))
-                    val_satd_s.append(float(val_mse))
+                    val_satd_s.append(float(val_satd))
                     tmp_psnr, tmp_ssim = test_quality(v_label.reshape(
                         [-1, block_size, block_size])[0] * 255.0, recon.reshape([-1, block_size, block_size])[0] * 255.0)
                     psnr_s.append(tmp_psnr)
