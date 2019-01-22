@@ -16,8 +16,8 @@ class h5Handler(object):
     def write(self, datas, labels, create=True):
         if create:
             f = h5py.File(self.h5_path, 'w')
-            f.create_dataset('data', data=datas, maxshape=(None, 3072, 1, 1), chunks=True, dtype='float32')
-            f.create_dataset('label', data=labels, maxshape=(None, 1024, 1, 1), chunks=True, dtype='float32')
+            f.create_dataset('data', data=datas, maxshape=(None, datas.shape[1], datas.shape[2]), chunks=True, dtype='float32')
+            f.create_dataset('label', data=labels, maxshape=(None, labels.shape[1], labels.shape[2]), chunks=True, dtype='float32')
             f.close()
         else:
             # append mode
@@ -32,8 +32,8 @@ class h5Handler(object):
             # print(cursize)
             # # --------------for debug------------------
 
-            h5data.resize([cursize[0] + addsize[0], 3072, 1, 1])
-            h5label.resize([cursize[0] + addsize[0], 1024, 1, 1])
-            h5data[-addsize[0]:,:,:,:] = datas
-            h5label[-addsize[0]:,:,:,:] = labels
+            h5data.resize([cursize[0] + addsize[0], datas.shape[1], datas.shape[2]])
+            h5label.resize([cursize[0] + addsize[0], labels.shape[1], labels.shape[2]])
+            h5data[-addsize[0]:,:,:] = datas
+            h5label[-addsize[0]:,:,:] = labels
             f.close()
