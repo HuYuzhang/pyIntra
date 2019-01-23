@@ -13,7 +13,7 @@ dec_name = sys.argv[4]
 gt_name = sys.argv[5]
 height = int(sys.argv[6])
 width = int(sys.argv[7])
-h5_name = "s" + str(cu_size) + "_m" + str(scale) + '.h5'
+h5_name = "../../train/s" + str(cu_size) + "_m" + str(scale) + '.h5'
 
 
 cu_pixel = cu_size * cu_size

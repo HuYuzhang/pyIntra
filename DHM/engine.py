@@ -1,7 +1,7 @@
 # Data augmented
 from __future__ import print_function
 import tensorflow as tf
-import cv2
+# import cv2
 import h5py
 import numpy as np
 import sys
@@ -45,7 +45,7 @@ def drive():
         weights_name = sys.argv[7]
     print(weights_name)
     prefix = 's' + str(block_size) + '_m' + str(scale)
-    h5_path = '../train/data/' + prefix + '.h5'
+    h5_path = '../../train/data/' + prefix + '.h5'
     # load data
     # h5_path = sys.argv[8]
     hf = None
@@ -147,13 +147,13 @@ def drive():
         valid_mse_mean = tf.reduce_mean(valid_mse_input)
         valid_satd_mean = tf.reduce_mean(valid_satd_input)
 
-        valid_mse_input = tf.summary.scalar(
+        valid_mse_summary = tf.summary.scalar(
             'MSE loss', valid_mse_mean)
         valid_satd_summary = tf.summary.scalar(
             'SATD loss', valid_satd_mean)
 
         valid_merged = tf.summary.merge(
-            [valid_satd_summary, valid_mse_input])
+            [valid_satd_summary, valid_mse_summary])
         # sub1--------------------------------for valid mean
 
         # --------------- part for tensorboard----------------
