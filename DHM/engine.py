@@ -218,19 +218,22 @@ def run_test():
         print(
             "Usage: model_module_name train_mode scale block_size init_lr batch_size [weights_name]")
     print(sys.argv)
-    block_size = 8
     model_module_name = sys.argv[2]
-    train_mode = sys.argv[3]
-    scale = int(sys.argv[4])
-    block_size = int(sys.argv[5])
+    scale = int(sys.argv[3])
+    block_size = int(sys.argv[4])
+    init_lr = float(sys.argv[5])
     batch_size = int(sys.argv[6])
-    weights_name = sys.argv[7]
+    weights_name = None
+    if len(sys.argv) == 8:
+        weights_name = sys.argv[7]
+    print(weights_name)
 
     inputs = tf.placeholder(
         tf.float32, [batch_size, block_size * scale, block_size * scale])
     targets = tf.placeholder(tf.float32, [batch_size, block_size, block_size])
 
-    h5_path = '../../train' + str(scale) + '/' + train_mode + '.h5'
+    prefix = 's' + str(block_size) + '_m' + str(scale)
+    h5_path = '../../train/data/' + prefix + '.h5'
 
     hf = None
 
@@ -246,7 +249,7 @@ def run_test():
                                                                     inputs,
                                                                     targets,
                                                                     test=True,
-                                                                    params={'learning_rate': 0,
+                                                                    params={'learning_rate': init_lr,
                                                                             'batch_size': batch_size,
                                                                             'scale': scale,
                                                                             'block_size': block_size
@@ -289,7 +292,7 @@ def run_test():
             ssim_s.append(val_ssim)
             val_cnt = val_cnt + batch_size
             print('-----------> tmp data, now %d sample tested, %d in total, psnr: %f, ssim: %f, pixel mse loss: %f, freq mse loss: %f, satd_loss: %f<------------' %
-                  (val_cnt, length, val_psnr, val_ssim, val_mse_s, val_mse_s, val_satd))
+                  (val_cnt, length, val_psnr, val_ssim, val_mse, val_mse, val_satd))
         print('Finish testing, now psnr is: %f, and ssim is: %f, pixel mse loss: %f, freq mse loss: %f, satd_loss: %f' %
               (np.mean(psnr_s), np.mean(ssim_s), np.mean(val_mse_s), np.mean(val_mse_s), np.mean(val_satd_s)))
 

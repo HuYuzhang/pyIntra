@@ -80,18 +80,18 @@ def build_model(input_tensor, target_tensor, params=None, test=False):
             H_target[0, 0:16, 16:32] = H_target[:, 0:16, 0:16]
             H_target[0, 16:32, 16:32] = H_target[:, 0:16, 0:16]
 
-            TH0 = tf.constant(H_target)
+            TH0 = tf.constant(H_target[:, :block_size, :block_size])
 
             TH1 = tf.tile(TH0, (input_tensor.shape[0], 1, 1))
 
-            diff = tf.reshape(y_true - y_pred, (-1, 32, 32))
+            diff = tf.reshape(y_true - y_pred, (-1, block_size, block_size))
 
             return tf.reduce_mean(tf.sqrt(tf.square(tf.matmul(tf.matmul(TH1, diff), TH1)) + 0.0001))
 
         # prediction in pixel domain
     recon = tf.reshape(fc4, (-1, block_size, block_size), name='3_dim_raw_output_pixel')
     mse_loss = tf.reduce_mean(tf.square((target_tensor-recon)))
-    satd_loss = mse_loss
+    satd_loss = SATD(target_tensor, recon)
     # loss = satd_loss
     loss = mse_loss
         
@@ -99,7 +99,7 @@ def build_model(input_tensor, target_tensor, params=None, test=False):
     if test:
         return satd_loss, mse_loss, recon
 
-    global_step = tf.Variable(0, trainable=False)
+    # global_step = tf.Variable(0, trainable=False)
     # learning_rate = tf.train.exponential_decay(params['learning_rate'], global_step=global_step, decay_steps = 10000, decay_rate=0.7)
     optimizer = tf.train.AdamOptimizer(learning_rate=lr)
     train_op = optimizer.minimize(loss=loss, global_step=tf.train.get_global_step())
