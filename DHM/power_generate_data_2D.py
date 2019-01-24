@@ -1,5 +1,5 @@
 import numpy as np
-# import cv2 as cv
+import cv2
 import sys
 from mylib import read_frame, h5Handler
 import random
@@ -43,6 +43,8 @@ if not random_flag:
     for i in range(f_cnt):
         Y = read_frame(dec_name, i, height, width)
         YY = read_frame(gt_name, i, height, width)
+        cv2.imwrite('dec.png', Y)
+        cv2.imwrite('gt.png', YY)
         for lx in range(0,width,cu_size):
             for ly in range(0,height,cu_size):
                 rx = lx + cu_size * scale

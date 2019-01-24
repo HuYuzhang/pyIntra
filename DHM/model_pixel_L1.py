@@ -43,19 +43,35 @@ def build_model(input_tensor, target_tensor, params=None, test=False):
     # now the input_payer is of size [batch_size, 5120]
     # For the number of hidden state, we keep same with 3072 input
 
-    _fc1 = tf.layers.dense(input_layer, 3072, name='fc1')
+    _fc1 = tf.layers.dense(input_layer, 512, name='fc1')
 
     fc1 = tf.nn.elu(_fc1, name='relu1')
 
-    _fc2 = tf.layers.dense(fc1, 3072, name='fc2')
+    _fc2 = tf.layers.dense(fc1, 512, name='fc2')
 
     fc2 = tf.nn.elu(_fc2, name='relu2')
 
-    _fc3 = tf.layers.dense(fc2, 3072, name='fc3')
+    _fc3 = tf.layers.dense(fc2, 512, name='fc3')
 
     fc3 = tf.nn.elu(_fc3, name='relu3')
 
-    _fc4 = tf.layers.dense(fc3, block_size*block_size, name='fc4')
+    _fc4 = tf.layers.dense(fc3, 512, name='fc4')
+
+    fc4 = tf.nn.elu(_fc4, name='relu4')
+
+    _fc5 = tf.layers.dense(fc4, 512, name='fc5')
+
+    fc5 = tf.nn.elu(_fc5, name='relu5')
+
+    _fc6 = tf.layers.dense(fc5, 512, name='fc6')
+
+    fc6 = tf.nn.elu(_fc6, name='relu6')
+
+    _fc7 = tf.layers.dense(fc6, 512, name='fc7')
+
+    fc7 = tf.nn.elu(_fc7, name='relu7')
+
+    _fc8 = tf.layers.dense(fc7, block_size*block_size, name='fc8')
 
     # fc4 = tf.nn.relu(_fc4, name='relu4')
 
@@ -89,11 +105,11 @@ def build_model(input_tensor, target_tensor, params=None, test=False):
             return tf.reduce_mean(tf.sqrt(tf.square(tf.matmul(tf.matmul(TH1, diff), TH1)) + 0.0001))
 
         # prediction in pixel domain
-    recon = tf.reshape(_fc4, (-1, block_size, block_size), name='3_dim_raw_output_pixel')
+    recon = tf.reshape(_fc8, (-1, block_size, block_size), name='3_dim_raw_output_pixel')
     mse_loss = tf.reduce_mean(tf.square((target_tensor-recon)))
     satd_loss = SATD(target_tensor, recon)
-    loss = satd_loss
-    # loss = mse_loss
+    # loss = satd_loss
+    loss = mse_loss
         
     recon = tf.reshape(recon, (-1, block_size, block_size, 1), name='4_dim_out_pixel')
     if test:
