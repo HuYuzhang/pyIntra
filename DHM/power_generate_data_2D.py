@@ -8,7 +8,7 @@ import math
 
 ####### Configuration ##########
 cache_size = 2000
-random_flag = True
+random_flag = False
 random_num = 500
 ####### Configuration ##########
 
@@ -20,8 +20,8 @@ dec_name = sys.argv[4]
 gt_name = sys.argv[5]
 height = int(sys.argv[6])
 width = int(sys.argv[7])
-h5_name = "../../train/data/s" + str(cu_size) + "_m" + str(scale) + '.h5'
-
+#h5_name = "../../train/data/s" + str(cu_size) + "_m" + str(scale) + '.h5'
+h5_name = sys.argv[8]
 
 cu_pixel = cu_size * cu_size
 input_size = cu_pixel * (2 * scale - 1)

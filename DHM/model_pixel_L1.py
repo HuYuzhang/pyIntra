@@ -57,7 +57,7 @@ def build_model(input_tensor, target_tensor, params=None, test=False):
 
     _fc4 = tf.layers.dense(fc3, block_size*block_size, name='fc4')
 
-    fc4 = tf.nn.elu(_fc4, name='relu4')
+    # fc4 = tf.nn.relu(_fc4, name='relu4')
 
     def SATD(y_true, y_pred):
             H_8x8 = np.array(
@@ -89,11 +89,11 @@ def build_model(input_tensor, target_tensor, params=None, test=False):
             return tf.reduce_mean(tf.sqrt(tf.square(tf.matmul(tf.matmul(TH1, diff), TH1)) + 0.0001))
 
         # prediction in pixel domain
-    recon = tf.reshape(fc4, (-1, block_size, block_size), name='3_dim_raw_output_pixel')
+    recon = tf.reshape(_fc4, (-1, block_size, block_size), name='3_dim_raw_output_pixel')
     mse_loss = tf.reduce_mean(tf.square((target_tensor-recon)))
     satd_loss = SATD(target_tensor, recon)
-    # loss = satd_loss
-    loss = mse_loss
+    loss = satd_loss
+    # loss = mse_loss
         
     recon = tf.reshape(recon, (-1, block_size, block_size, 1), name='4_dim_out_pixel')
     if test:

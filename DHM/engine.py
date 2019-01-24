@@ -41,13 +41,13 @@ def drive():
     init_lr = float(sys.argv[5])
     batch_size = int(sys.argv[6])
     weights_name = None
-    if len(sys.argv) == 8:
-        weights_name = sys.argv[7]
+    #if len(sys.argv) == 8:
+    #    weights_name = sys.argv[7]
     print(weights_name)
     prefix = 's' + str(block_size) + '_m' + str(scale)
-    h5_path = '../../train/data/' + prefix + '.h5'
+    #h5_path = '../../train/data/' + prefix + '.h5'
     # load data
-    # h5_path = sys.argv[8]
+    h5_path = sys.argv[7]
     hf = None
 
     hf = h5py.File(h5_path)
@@ -170,8 +170,8 @@ def drive():
                         inputs: v_data, targets: v_label})
                     val_mse_s.append(float(val_mse))
                     val_satd_s.append(float(val_satd))
-                    tmp_psnr, tmp_ssim = test_quality(v_label.reshape(
-                        [-1, block_size, block_size])[0] * 255.0, recon.reshape([-1, block_size, block_size])[0] * 255.0)
+                    tmp_psnr, tmp_ssim = test_quality(np.clip(v_label,0,1).reshape(
+                        [-1, block_size, block_size])[0] * 255.0, np.clip(recon,0,1).reshape([-1, block_size, block_size])[0] * 255.0)
                     psnr_s.append(tmp_psnr)
                     ssim_s.append(tmp_ssim)
                     # print('#########tmp: ', tmp_psnr, tmp_ssim)
@@ -223,9 +223,9 @@ def run_test():
     block_size = int(sys.argv[4])
     init_lr = float(sys.argv[5])
     batch_size = int(sys.argv[6])
-    weights_name = None
-    if len(sys.argv) == 8:
-        weights_name = sys.argv[7]
+    #weights_name = None
+    #if len(sys.argv) == 8:
+    weights_name = sys.argv[7]
     print(weights_name)
 
     inputs = tf.placeholder(
@@ -233,8 +233,8 @@ def run_test():
     targets = tf.placeholder(tf.float32, [batch_size, block_size, block_size])
 
     prefix = 's' + str(block_size) + '_m' + str(scale)
-    h5_path = '../../train/data/' + prefix + '.h5'
-
+    #h5_path = '../../train/data/' + prefix + '.h5'
+    h5_path = sys.argv[8]
     hf = None
 
     hf = h5py.File(h5_path)
