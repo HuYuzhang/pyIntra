@@ -50,8 +50,8 @@ def drive():
     # checkpoint_dir = './ckpt/'
     with tf.Session() as sess:
         saver.restore(sess, weights_name)
-        import IPython
-        IPython.embed()
+        # import IPython
+        # IPython.embed()
         graph = convert_variables_to_constants(sess, sess.graph_def, ['main_full/4_dim_out_pixel'])
         #graph = convert_variables_to_constants(sess, sess.graph_def, ['main_full/Reshape_1'])
         tf.train.write_graph(graph,'../../pb','graph_m%d_s%d.pb' % (scale, block_size),as_text=False)

@@ -189,7 +189,7 @@ def drive():
                       (np.mean(psnr_s), np.mean(ssim_s)))
 
                 # print(val_satd_s)
-                print("Model name: %s, step %8d, Train SATD %.4f, Train pixel MSE %.4f, Train freq MSE %.4f, Val SATD %.4f, Val freq_MSE %.6f, Val pixel_MSE %.6f" % (
+                print("Model name: %s, step %8d, Train SATD %.6f, Train pixel MSE %.6f, Train freq MSE %.6f, Val SATD %.6f, Val freq_MSE %.6f, Val pixel_MSE %.6f" % (
                     model_module_name, i, np.mean(metrics[:, 0]), np.mean(metrics[:, 1]), np.mean(metrics[:, 2]), np.mean(val_satd_s), np.mean(val_mse_s), np.mean(val_mse_s)))
 
             # ------------------- Here is the training part ---------------

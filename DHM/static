@@ -1,0 +1,148 @@
+8*8 SATD fill with mean qp 37 
+
+
+I Slices--------------------------------------------------------                                                     │  1  [|||                          5.3%]   5  [|||                          6.6%]
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │  2  [||                           2.0%]   6  [|                            1.3%]
+                1    i    1124.4000   30.2067   35.0309   35.4757   31.3357
+
+Used PU num: 2048                                                                                                    │ 8322 huzi       20   0  800M  154M 83244 S  0.7  0.2  0:16.63 /opt/google/chrome/chro
+Total CU num: 12480                                                                                                  │ 2170 privoxy    20   0  314M 17000  2496 S  0.7  0.0  1:45.39 /usr/sbin/privoxy --pid
+Deep Usage Ratio: 0.164103
+
+
+
+8*8 SATD WITH MEAN QP 32
+
+I Slices--------------------------------------------------------                                                     │struct@huzi-cuda:~$ cd hyz/lab/test
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │
+                1    i    2072.1600   33.6274   36.9282   37.2041   34.5012
+
+ Total Time:       54.387 sec.                                                                                       │
+5                                                                                                                    │
+Used PU num: 1536                                                                                                    │
+Total CU num: 12480                                                                                                  │
+Deep Usage Ratio: 0.123077   
+
+
+8*8 SATD WITH MEAN QP 27
+I Slices--------------------------------------------------------                                                     │struct@huzi-cuda:~$ cd hyz/lab/test
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │
+                1    i    3572.8800   37.6194   39.3520   39.8682   38.1854
+5                                                                                                                    │
+Used PU num: 1384                                                                                                    │
+Total CU num: 12480                                                                                                  │
+Deep Usage Ratio: 0.110897                                                                                           │
+0 
+
+
+8*8 SATD WITH MEAN QP 22
+I Slices--------------------------------------------------------                                                     │I Slices--------------------------------------------------------
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR
+                1    i    5673.3600   41.9808   42.6777   43.2374   42.2801
+5                                                                                                                    │5
+Used PU num: 1144                                                                                                    │Used PU num: 8
+Total CU num: 12480                                                                                                  │Total CU num: 11648
+Deep Usage Ratio: 0.0916667                                                                                          │Deep Usage Ratio: 0.000686813
+0                
+
+--------------------------------------------------------------------------------------------------------------
+MSE
+
+27
+I Slices--------------------------------------------------------                                                     │struct@huzi-cuda:~$ cd hyz/lab/test
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │
+                1    i    3592.0800   37.6557   39.4131   39.9000   38.2243                                          │struct@huzi-cuda:~/hyz/lab/test$ htop
+                                                                                                                     │struct@huzi-cuda:~/hyz/lab/test$ htopa
+                                                                                                                     │
+P Slices--------------------------------------------------------                                                     │Command 'htopa' not found, did you mean:
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │
+                0    p         -nan      -nan      -nan      -nan      -nan                                          │  command 'htop' from snap htop (2.2.0)
+                                                                                                                     │  command 'htop' from deb htop
+                                                                                                                     │
+B Slices--------------------------------------------------------                                                     │See 'snap info <snapname>' for additional versions.
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │
+                0    b         -nan      -nan      -nan      -nan      -nan                                          │struct@huzi-cuda:~/hyz/lab/test$ htop
+                                                                                                                     │struct@huzi-cuda:~/hyz/lab/test$ htop
+RVM: 0.000                                                                                                           │struct@huzi-cuda:~/hyz/lab/test$ 
+Bytes written to file: 14967 (3592.080 kbps)                                                                         │
+                                                                                                                     │
+ Total Time:       81.284 sec.                                                                                       │
+5                                                                                                                    │
+Used PU num: 720                                                                                                     │
+Total CU num: 12480                                                                                                  │
+Deep Usage Ratio: 0.0576923  
+
+
+22
+I Slices--------------------------------------------------------                                                     │I Slices--------------------------------------------------------
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR
+                1    i    5668.3200   41.9667   42.6535   43.2887   42.2731                                          │                1    i    1095.6000   30.1283   35.0143   35.2659   31.2530
+                                                                                                                     │
+                                                                                                                     │
+P Slices--------------------------------------------------------                                                     │P Slices--------------------------------------------------------
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR
+                0    p         -nan      -nan      -nan      -nan      -nan                                          │                0    p         -nan      -nan      -nan      -nan      -nan
+                                                                                                                     │
+                                                                                                                     │
+B Slices--------------------------------------------------------                                                     │B Slices--------------------------------------------------------
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR
+                0    b         -nan      -nan      -nan      -nan      -nan                                          │                0    b         -nan      -nan      -nan      -nan      -nan
+                                                                                                                     │
+RVM: 0.000                                                                                                           │RVM: 0.000
+Bytes written to file: 23618 (5668.320 kbps)                                                                         │Bytes written to file: 4565 (1095.600 kbps)
+                                                                                                                     │
+ Total Time:       76.918 sec.                                                                                       │ Total Time:       17.814 sec.
+5                                                                                                                    │5
+Used PU num: 832                                                                                                     │Used PU num: 8
+Total CU num: 12480                                                                                                  │Total CU num: 11648
+Deep Usage Ratio: 0.0666667     
+
+
+37
+I Slices--------------------------------------------------------                                                     │struct@huzi-cuda:~$ cd hyz/lab/test
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │
+                1    i    1126.5600   30.2259   35.1405   35.4163   31.3561                                          │struct@huzi-cuda:~/hyz/lab/test$ htop
+                                                                                                                     │struct@huzi-cuda:~/hyz/lab/test$ htopa
+                                                                                                                     │
+P Slices--------------------------------------------------------                                                     │Command 'htopa' not found, did you mean:
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │
+                0    p         -nan      -nan      -nan      -nan      -nan                                          │  command 'htop' from snap htop (2.2.0)
+                                                                                                                     │  command 'htop' from deb htop
+                                                                                                                     │
+B Slices--------------------------------------------------------                                                     │See 'snap info <snapname>' for additional versions.
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │
+                0    b         -nan      -nan      -nan      -nan      -nan                                          │struct@huzi-cuda:~/hyz/lab/test$ htop
+                                                                                                                     │struct@huzi-cuda:~/hyz/lab/test$ htop
+RVM: 0.000                                                                                                           │struct@huzi-cuda:~/hyz/lab/test$ 
+Bytes written to file: 4694 (1126.560 kbps)                                                                          │
+                                                                                                                     │
+ Total Time:       75.713 sec.                                                                                       │
+5                                                                                                                    │
+Used PU num: 1040                                                                                                    │
+Total CU num: 12480                                                                                                  │
+Deep Usage Ratio: 0.0833333                    
+
+32 
+
+I Slices--------------------------------------------------------                                                     │I Slices--------------------------------------------------------
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR
+                1    i    2070.0000   33.6431   36.9299   37.3383   34.5260                                          │                1    i    1095.6000   30.1283   35.0143   35.2659   31.2530
+                                                                                                                     │
+                                                                                                                     │
+P Slices--------------------------------------------------------                                                     │P Slices--------------------------------------------------------
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR
+                0    p         -nan      -nan      -nan      -nan      -nan                                          │                0    p         -nan      -nan      -nan      -nan      -nan
+                                                                                                                     │
+                                                                                                                     │
+B Slices--------------------------------------------------------                                                     │B Slices--------------------------------------------------------
+        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR                                          │        Total Frames |   Bitrate     Y-PSNR    U-PSNR    V-PSNR    YUV-PSNR
+                0    b         -nan      -nan      -nan      -nan      -nan                                          │                0    b         -nan      -nan      -nan      -nan      -nan
+                                                                                                                     │
+RVM: 0.000                                                                                                           │RVM: 0.000
+Bytes written to file: 8625 (2070.000 kbps)                                                                          │Bytes written to file: 4565 (1095.600 kbps)
+                                                                                                                     │
+ Total Time:       80.788 sec.                                                                                       │ Total Time:       17.814 sec.
+5                                                                                                                    │5
+Used PU num: 1376                                                                                                    │Used PU num: 8
+Total CU num: 12480                                                                                                  │Total CU num: 11648
+Deep Usage Ratio: 0.110256    

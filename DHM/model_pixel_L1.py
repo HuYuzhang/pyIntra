@@ -108,8 +108,8 @@ def build_model(input_tensor, target_tensor, params=None, test=False):
     recon = tf.reshape(_fc8, (-1, block_size, block_size), name='3_dim_raw_output_pixel')
     mse_loss = tf.reduce_mean(tf.square((target_tensor-recon)))
     satd_loss = SATD(target_tensor, recon)
-    # loss = satd_loss
-    loss = mse_loss
+    loss = satd_loss
+    # loss = mse_loss
         
     recon = tf.reshape(recon, (-1, block_size, block_size, 1), name='4_dim_out_pixel')
     if test:
